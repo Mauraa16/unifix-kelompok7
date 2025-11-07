@@ -6,7 +6,7 @@
                 <div class="brand-logo">
                     <span class="logo-icon">🚀</span>
                 </div>
-                <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
+                <span class="brand-text">{{ config('app.name', 'UNIFIX') }}</span>
             </a>
         </div>
 
