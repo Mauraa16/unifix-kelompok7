@@ -22,9 +22,10 @@
         @include('layouts.header')
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" style="padding-top: 70px;">
             @yield('content')
         </main>
+
 
         @include('layouts.footer')
     </div>

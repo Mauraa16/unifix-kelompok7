@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- AOS CSS langsung di sini -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 
 <style>
 body {
@@ -238,7 +237,7 @@ body {
 <!-- HERO SECTION -->
 <section class="hero-section">
     <div class="container hero-container">
-        <div class="hero-content" data-aos="fade-right">
+        <div class="hero-content">
             <h1 class="hero-title">Selamat Datang di UNIFIX</h1>
             <p class="hero-subtitle">Sistem Pelaporan Kerusakan Fasilitas Universitas yang cepat, aman, dan efisien</p>
             <div class="hero-actions">
@@ -252,7 +251,7 @@ body {
                 @endif
             </div>
         </div>
-        <div class="hero-image" data-aos="fade-left">
+        <div class="hero-image">
             <img src="https://img.freepik.com/free-vector/maintenance-concept-illustration_114360-392.jpg"
                  alt="UNIFIX Illustration" class="hero-illustration">
         </div>
@@ -263,21 +262,21 @@ body {
 @if(auth()->user()->role == 'mahasiswa')
 <section class="stats-section">
     <div class="container stats-grid">
-        <div class="stat-card" data-aos="zoom-in">
+        <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
             <div>
                 <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->count() }}</h3>
                 <p class="stat-label">Total Laporan</p>
             </div>
         </div>
-        <div class="stat-card" data-aos="zoom-in" data-aos-delay="150">
+        <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-clock"></i></div>
             <div>
                 <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->where('status', 'Belum Diproses')->count() }}</h3>
                 <p class="stat-label">Belum Diproses</p>
             </div>
         </div>
-        <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+        <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
             <div>
                 <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->where('status', 'Sudah Diproses')->count() }}</h3>
@@ -291,7 +290,7 @@ body {
 <!-- FEATURES SECTION -->
 <section class="features-section">
     <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <div class="section-header">
             <h2 class="section-title">Fitur Unggulan</h2>
             <p class="section-subtitle">Pelaporan kerusakan fasilitas universitas yang mudah dan cepat</p>
         </div>
@@ -304,7 +303,7 @@ body {
                 ['fa-mobile-alt', 'Responsive Design', 'Akses mudah di semua perangkat.'],
                 ['fa-shield-alt', 'Keamanan Data', 'Data Anda terlindungi sepenuhnya.']
             ] as $index => $feature)
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+            <div class="feature-card">
                 <div class="feature-icon"><i class="fas {{ $feature[0] }}"></i></div>
                 <h3>{{ $feature[1] }}</h3>
                 <p>{{ $feature[2] }}</p>
@@ -318,12 +317,12 @@ body {
 @if(auth()->user()->role == 'mahasiswa')
 <section class="quick-actions-section">
     <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <div class="section-header">
             <h2 class="section-title">Aksi Cepat</h2>
             <p class="section-subtitle">Laporan terbaru dan aksi yang sering digunakan</p>
         </div>
         <div class="quick-actions-grid">
-            <a href="{{ route('laporan.create') }}" class="quick-action-card" data-aos="fade-right">
+            <a href="{{ route('laporan.create') }}" class="quick-action-card">
                 <div class="quick-action-icon"><i class="fas fa-plus-circle"></i></div>
                 <div class="quick-action-content">
                     <h3>Buat Laporan Baru</h3>
@@ -331,7 +330,7 @@ body {
                 </div>
                 <div class="quick-action-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-            <a href="{{ route('laporan.index') }}" class="quick-action-card" data-aos="fade-left">
+            <a href="{{ route('laporan.index') }}" class="quick-action-card">
                 <div class="quick-action-icon"><i class="fas fa-list"></i></div>
                 <div class="quick-action-content">
                     <h3>Lihat Semua Laporan</h3>
@@ -344,12 +343,5 @@ body {
 </section>
 @endif
 
-<!-- AOS JS langsung di sini -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-AOS.init({
-    duration: 1000,
-    once: true
-});
-</script>
+
 @endsection

@@ -1,5 +1,0 @@
-- [x] Update footer.blade.php to replace Laravel branding with UNIFIX branding
-- [x] Fix incomplete JavaScript in create.blade.php (camera-btn class assignment)
-- [ ] Clean up any redundant CSS in create.blade.php if needed
-- [x] Test the updated layout (server running on http://127.0.0.1:8000)
-- [x] Update config/app.php to set default APP_NAME to 'UNIFIX'

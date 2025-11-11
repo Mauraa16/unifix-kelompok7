@@ -1,22 +1,22 @@
 <!-- Modern Header (Slim + Navigasi Tambahan) -->
-<header class="modern-header" data-aos="fade-down">
+<header class="modern-header">
   <nav class="nav-container">
     <!-- Brand -->
-    <div class="nav-brand" data-aos="fade-right">
+    <div class="nav-brand">
       <a href="{{ url('/') }}" class="brand-link">
         <span class="brand-text">UNIFIX</span>
       </a>
     </div>
 
     <!-- Menu -->
-    <div class="nav-menu" data-aos="fade-up">
+    <div class="nav-menu">
       <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ route('laporan.index') }}" class="nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
       <a href="{{ route('laporan.create') }}" class="nav-link {{ request()->is('laporan/create') ? 'active' : '' }}">Buat Laporan</a>
     </div>
 
     <!-- Auth Buttons -->
-    <div class="nav-auth" data-aos="fade-left">
+    <div class="nav-auth">
       @guest
         @if (Route::has('login'))
           <a href="{{ route('login') }}" class="auth-btn login-btn">
@@ -41,19 +41,9 @@
                 <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
             </button>
-
-            <!-- Tombol Logout Terpisah -->
-            <a href="{{ route('logout') }}" class="logout-btn"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-               title="Keluar">
-              <i class="fas fa-sign-out-alt"></i>
-              <span>Keluar</span>
-            </a>
           </div>
 
           <div class="user-dropdown" id="userDropdown">
-            <a href="#" class="dropdown-item"><span>Profile</span></a>
-            <a href="#" class="dropdown-item"><span>Settings</span></a>
             <hr class="dropdown-divider">
             <a class="dropdown-item logout-item" href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -77,7 +67,7 @@
   </nav>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu" data-aos="fade-down">
+  <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-content">
       <a href="{{ url('/') }}" class="mobile-nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ route('laporan.index') }}" class="mobile-nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
@@ -115,10 +105,12 @@
 
 .modern-header {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
-  padding: 8px 25px; /* slim version */
+  padding: 8px 25px;
   color: white;
-  position: sticky;
+  position: fixed; /* ✅ ubah dari sticky ke fixed */
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1000;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
   font-family: 'Poppins', sans-serif;
@@ -285,6 +277,11 @@
     margin-top: 5px;
     text-align: center;
   }
+  #app {
+    position: static !important;
+    overflow: visible !important;
+  }
+
 }
 </style>
 
@@ -295,15 +292,4 @@ function toggleMobileMenu() {
 function toggleUserDropdown() {
   document.getElementById('userDropdown').classList.toggle('active');
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const elements = document.querySelectorAll("[data-aos]");
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("aos-animate");
-      }
-    });
-  }, { threshold: 0.2 });
-  elements.forEach(el => observer.observe(el));
-});
 </script>
