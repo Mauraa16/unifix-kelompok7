@@ -31,15 +31,25 @@
         @endif
       @else
         <div class="user-menu">
-          <button class="user-btn" onclick="toggleUserDropdown()">
-            <div class="user-avatar">
-              <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-            </div>
-            <span class="user-name">{{ Auth::user()->name }}</span>
-            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            </svg>
-          </button>
+          <div class="user-info">
+            <button class="user-btn" onclick="toggleUserDropdown()">
+              <div class="user-avatar">
+                <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+              </div>
+              <span class="user-name">{{ Auth::user()->name }}</span>
+              <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </button>
+
+            <!-- Tombol Logout Terpisah -->
+            <a href="{{ route('logout') }}" class="logout-btn"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+               title="Keluar">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Keluar</span>
+            </a>
+          </div>
 
           <div class="user-dropdown" id="userDropdown">
             <a href="#" class="dropdown-item"><span>Profile</span></a>
@@ -92,7 +102,7 @@
           <a href="#" class="mobile-nav-link">Settings</a>
           <a class="mobile-nav-link logout-link" href="{{ route('logout') }}"
              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            Logout
+            <i class="fas fa-sign-out-alt"></i> Keluar
           </a>
         @endguest
       </div>
@@ -159,6 +169,7 @@
 .nav-auth {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .auth-btn {
@@ -191,6 +202,39 @@
 
 .register-btn:hover {
   background: #5a0fb5;
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Logout Button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logout-btn i {
+  font-size: 14px;
 }
 
 /* Mobile */

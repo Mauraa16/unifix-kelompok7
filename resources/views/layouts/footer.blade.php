@@ -7,7 +7,7 @@
                     <span class="logo-icon">🚀</span>
                 </div>
                 <span class="footer-brand-text">{{ config('app.name', 'UNIFIX') }}</span>
-                <p class="footer-description">Building amazing web applications with modern technology.</p>
+                <p class="footer-description">Sistem Pelaporan Kerusakan Fasilitas Universitas dengan Teknologi Modern.</p>
             </div>
 
             <div class="footer-links">
@@ -67,7 +67,7 @@
             </div>
 
             <div class="footer-copyright">
-                <p>&copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ config('app.name', 'UNIFIX') }}. All rights reserved.</p>
             </div>
         </div>
     </div>

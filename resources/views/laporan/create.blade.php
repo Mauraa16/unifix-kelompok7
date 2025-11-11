@@ -815,11 +815,187 @@
                                 </div>
                             @enderror
                         </div>
+
                     </div>
 
-                   
+                    <div class="form-navigation">
+
+                        <button type="button" class="btn btn-next" onclick="nextStep(1)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+
                     </div>
+
                 </div>
+
+                <!-- Step 2: Detail Lokasi -->
+
+                <div class="form-step" id="step-2">
+
+                    <div class="step-header">
+
+                        <h3><i class="fas fa-map-marker-alt"></i> Detail Lokasi</h3>
+
+                        <p>Berikan lokasi dan deskripsi detail kerusakan</p>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="lokasi" class="form-label">
+
+                                <i class="fas fa-map-pin"></i> Lokasi Kerusakan <span class="required">*</span>
+
+                            </label>
+
+                            <input type="text" class="form-input @error('lokasi') is-invalid @enderror" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" placeholder="Contoh: Gedung A, Lantai 1, Ruang 101" required>
+
+                            <div class="form-help">Sebutkan gedung, lantai, dan ruangan secara spesifik</div>
+
+                            @error('lokasi')
+
+                                <div class="form-error">
+
+                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
+
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="deskripsi" class="form-label">
+
+                                <i class="fas fa-align-left"></i> Deskripsi Kerusakan <span class="required">*</span>
+
+                            </label>
+
+                            <textarea class="form-textarea @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" placeholder="Jelaskan detail kerusakan yang terjadi..." required>{{ old('deskripsi') }}</textarea>
+
+                            <div class="form-help">Berikan deskripsi yang jelas dan detail tentang kondisi kerusakan</div>
+
+                            @error('deskripsi')
+
+                                <div class="form-error">
+
+                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
+
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-navigation">
+
+                        <button type="button" class="btn btn-prev" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Sebelumnya</button>
+
+                        <button type="button" class="btn btn-next" onclick="nextStep(2)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+
+                    </div>
+
+                </div>
+
+                <!-- Step 3: Dokumentasi -->
+
+                <div class="form-step" id="step-3">
+
+                    <div class="step-header">
+
+                        <h3><i class="fas fa-camera"></i> Dokumentasi</h3>
+
+                        <p>Upload foto kerusakan untuk dokumentasi</p>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="photo-upload-section">
+
+                            <div class="photo-upload-options">
+
+                                <div class="photo-option-btn" id="file-btn" onclick="document.getElementById('foto').click()">
+
+                                    <i class="fas fa-upload"></i>
+
+                                    <span>Upload dari Galeri</span>
+
+                                </div>
+
+                                <span class="photo-option-divider">atau</span>
+
+                                <div class="photo-option-btn active" id="camera-btn">
+
+                                    <i class="fas fa-camera"></i>
+
+                                    <span>Ambil Foto</span>
+
+                                </div>
+
+                            </div>
+
+                            <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
+
+                            <div class="camera-preview" id="camera-preview" style="display: none;">
+
+                                <video id="video" autoplay></video>
+
+                                <canvas id="canvas" style="display: none;"></canvas>
+
+                                <div class="camera-controls">
+
+                                    <button type="button" class="btn-capture" id="capture-btn">Ambil Foto</button>
+
+                                    <button type="button" class="btn-cancel" id="cancel-camera">Batal</button>
+
+                                </div>
+
+                            </div>
+
+                            <div class="photo-preview" id="photo-preview" style="display: none;">
+
+                                <div class="preview-header">
+
+                                    <h4>Pratinjau Foto</h4>
+
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="remove-photo">Hapus</button>
+
+                                </div>
+
+                                <img id="preview-image" src="" alt="Preview">
+
+                                <div class="photo-help">
+
+                                    <i class="fas fa-info-circle"></i>
+
+                                    <span>Pastikan foto menunjukkan kerusakan dengan jelas</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-navigation">
+
+                        <button type="button" class="btn btn-prev" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Sebelumnya</button>
+
+                        <button type="submit" class="btn btn-submit">Kirim Laporan <i class="fas fa-paper-plane"></i></button>
+
+                    </div>
+
+                </div>
+
             </form>
         </div>
     </div>
@@ -986,4 +1162,5 @@ function showPhotoPreview(imageSrc) {
 function removePhoto() {
     document.getElementById('foto').value = '';
     document.getElementById('photo-preview').style.display = 'none';
-    document.getElementById('camera-btn').class
+    document.getElementById('camera-btn').classList.add('active');
+}
