@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(MahasiswaSeeder::class);
+        $this->call(PetugasSeeder::class);
+        $this->call(AdminSeeder::class);
         $this->call(KategoriLaporanSeeder::class);
     }
 }

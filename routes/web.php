@@ -22,3 +22,17 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::resource('laporan', App\Http\Controllers\LaporanController::class);
 });
+
+// Routes untuk Petugas (contoh - bisa disesuaikan)
+Route::middleware(['auth', 'role:petugas'])->group(function () {
+    Route::get('/petugas/dashboard', function () {
+        return view('petugas.dashboard');
+    })->name('petugas.dashboard');
+});
+
+// Routes untuk Admin (contoh - bisa disesuaikan)
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});

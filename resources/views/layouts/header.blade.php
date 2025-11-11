@@ -10,9 +10,18 @@
 
     <!-- Menu -->
     <div class="nav-menu">
-      <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
-      <a href="{{ route('laporan.index') }}" class="nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
-      <a href="{{ route('laporan.create') }}" class="nav-link {{ request()->is('laporan/create') ? 'active' : '' }}">Buat Laporan</a>
+      @auth
+        @if(auth()->user()->role == 'mahasiswa')
+          <a href="{{ route('home') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('laporan.index') }}" class="nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
+        @elseif(auth()->user()->role == 'petugas')
+          <a href="{{ route('petugas.dashboard') }}" class="nav-link {{ request()->is('petugas/dashboard') ? 'active' : '' }}">Dashboard</a>
+          <a href="{{ route('home') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+        @elseif(auth()->user()->role == 'admin')
+          <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a>
+          <a href="{{ route('home') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+        @endif
+      @endauth
     </div>
 
     <!-- Auth Buttons -->
@@ -69,9 +78,18 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-content">
-      <a href="{{ url('/') }}" class="mobile-nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
-      <a href="{{ route('laporan.index') }}" class="mobile-nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
-      <a href="{{ route('laporan.create') }}" class="mobile-nav-link {{ request()->is('laporan/create') ? 'active' : '' }}">Buat Laporan</a>
+      @auth
+        @if(auth()->user()->role == 'mahasiswa')
+          <a href="{{ route('home') }}" class="mobile-nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('laporan.index') }}" class="mobile-nav-link {{ request()->is('laporan*') ? 'active' : '' }}">Kelola Laporan</a>
+        @elseif(auth()->user()->role == 'petugas')
+          <a href="{{ route('petugas.dashboard') }}" class="mobile-nav-link {{ request()->is('petugas/dashboard') ? 'active' : '' }}">Dashboard</a>
+          <a href="{{ route('home') }}" class="mobile-nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+        @elseif(auth()->user()->role == 'admin')
+          <a href="{{ route('admin.dashboard') }}" class="mobile-nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a>
+          <a href="{{ route('home') }}" class="mobile-nav-link {{ request()->is('home') ? 'active' : '' }}">Beranda</a>
+        @endif
+      @endauth
 
       <div class="mobile-auth">
         @guest
