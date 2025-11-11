@@ -232,13 +232,13 @@
     margin-bottom: 20px;
 }
 
+/* <CHANGE> Removed duplicate display: flex property */
 .form-label {
-    display: block;
+    display: flex;
     font-weight: 600;
     color: #374151;
     margin-bottom: 8px;
     font-size: 14px;
-    display: flex;
     align-items: center;
     gap: 6px;
 }
@@ -689,6 +689,7 @@
     }
 }
 </style>
+
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
@@ -815,183 +816,114 @@
                                 </div>
                             @enderror
                         </div>
-
                     </div>
 
                     <div class="form-navigation">
-
                         <button type="button" class="btn btn-next" onclick="nextStep(1)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
-
                     </div>
 
                 </div>
 
                 <!-- Step 2: Detail Lokasi -->
-
                 <div class="form-step" id="step-2">
 
                     <div class="step-header">
-
                         <h3><i class="fas fa-map-marker-alt"></i> Detail Lokasi</h3>
-
                         <p>Berikan lokasi dan deskripsi detail kerusakan</p>
-
                     </div>
 
                     <div class="form-row">
-
                         <div class="form-group">
-
                             <label for="lokasi" class="form-label">
-
                                 <i class="fas fa-map-pin"></i> Lokasi Kerusakan <span class="required">*</span>
-
                             </label>
-
                             <input type="text" class="form-input @error('lokasi') is-invalid @enderror" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" placeholder="Contoh: Gedung A, Lantai 1, Ruang 101" required>
-
                             <div class="form-help">Sebutkan gedung, lantai, dan ruangan secara spesifik</div>
-
                             @error('lokasi')
-
                                 <div class="form-error">
-
                                     <i class="fas fa-exclamation-circle"></i> {{ $message }}
-
                                 </div>
-
                             @enderror
-
                         </div>
-
                     </div>
 
                     <div class="form-row">
-
                         <div class="form-group">
-
                             <label for="deskripsi" class="form-label">
-
                                 <i class="fas fa-align-left"></i> Deskripsi Kerusakan <span class="required">*</span>
-
                             </label>
-
                             <textarea class="form-textarea @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" placeholder="Jelaskan detail kerusakan yang terjadi..." required>{{ old('deskripsi') }}</textarea>
-
                             <div class="form-help">Berikan deskripsi yang jelas dan detail tentang kondisi kerusakan</div>
-
                             @error('deskripsi')
-
                                 <div class="form-error">
-
                                     <i class="fas fa-exclamation-circle"></i> {{ $message }}
-
                                 </div>
-
                             @enderror
-
                         </div>
-
                     </div>
 
                     <div class="form-navigation">
-
                         <button type="button" class="btn btn-prev" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Sebelumnya</button>
-
                         <button type="button" class="btn btn-next" onclick="nextStep(2)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
-
                     </div>
 
                 </div>
 
                 <!-- Step 3: Dokumentasi -->
-
                 <div class="form-step" id="step-3">
 
                     <div class="step-header">
-
                         <h3><i class="fas fa-camera"></i> Dokumentasi</h3>
-
                         <p>Upload foto kerusakan untuk dokumentasi</p>
-
                     </div>
 
                     <div class="form-row">
-
                         <div class="photo-upload-section">
 
                             <div class="photo-upload-options">
-
                                 <div class="photo-option-btn" id="file-btn" onclick="document.getElementById('foto').click()">
-
                                     <i class="fas fa-upload"></i>
-
                                     <span>Upload dari Galeri</span>
-
                                 </div>
 
                                 <span class="photo-option-divider">atau</span>
 
                                 <div class="photo-option-btn active" id="camera-btn">
-
                                     <i class="fas fa-camera"></i>
-
                                     <span>Ambil Foto</span>
-
                                 </div>
-
                             </div>
 
+                            <!-- <CHANGE> Added proper event listener for file input -->
                             <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
 
                             <div class="camera-preview" id="camera-preview" style="display: none;">
-
                                 <video id="video" autoplay></video>
-
                                 <canvas id="canvas" style="display: none;"></canvas>
-
                                 <div class="camera-controls">
-
                                     <button type="button" class="btn-capture" id="capture-btn">Ambil Foto</button>
-
                                     <button type="button" class="btn-cancel" id="cancel-camera">Batal</button>
-
                                 </div>
-
                             </div>
 
                             <div class="photo-preview" id="photo-preview" style="display: none;">
-
                                 <div class="preview-header">
-
                                     <h4>Pratinjau Foto</h4>
-
                                     <button type="button" class="btn btn-sm btn-outline-danger" id="remove-photo">Hapus</button>
-
                                 </div>
-
-                                <img id="preview-image" src="" alt="Preview">
-
+                                <img id="preview-image" src="/placeholder.svg" alt="Preview">
                                 <div class="photo-help">
-
                                     <i class="fas fa-info-circle"></i>
-
                                     <span>Pastikan foto menunjukkan kerusakan dengan jelas</span>
-
                                 </div>
-
                             </div>
 
                         </div>
-
                     </div>
 
                     <div class="form-navigation">
-
                         <button type="button" class="btn btn-prev" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Sebelumnya</button>
-
                         <button type="submit" class="btn btn-submit">Kirim Laporan <i class="fas fa-paper-plane"></i></button>
-
                     </div>
 
                 </div>
@@ -1001,6 +933,7 @@
     </div>
 </section>
 
+<!-- <CHANGE> Added proper closing </script> tag and improved event listeners -->
 <script>
 let currentStep = 1;
 let stream = null;
@@ -1046,11 +979,15 @@ function validateStep(step) {
         if (!judul) {
             showFieldError('judul', 'Judul laporan wajib diisi');
             isValid = false;
+        } else {
+            clearFieldError('judul');
         }
 
         if (!kategori) {
             showFieldError('kategori_id', 'Kategori wajib dipilih');
             isValid = false;
+        } else {
+            clearFieldError('kategori_id');
         }
     } else if (step === 2) {
         const lokasi = document.getElementById('lokasi').value.trim();
@@ -1059,11 +996,24 @@ function validateStep(step) {
         if (!lokasi) {
             showFieldError('lokasi', 'Lokasi wajib diisi');
             isValid = false;
+        } else {
+            clearFieldError('lokasi');
         }
 
         if (!deskripsi) {
             showFieldError('deskripsi', 'Deskripsi wajib diisi');
             isValid = false;
+        } else {
+            clearFieldError('deskripsi');
+        }
+    } else if (step === 3) {
+        // <CHANGE> Added validation for photo in step 3
+        const fotoInput = document.getElementById('foto');
+        if (!fotoInput.files || fotoInput.files.length === 0) {
+            showFieldError('foto', 'Foto wajib diupload');
+            isValid = false;
+        } else {
+            clearFieldError('foto');
         }
     }
 
@@ -1072,6 +1022,8 @@ function validateStep(step) {
 
 function showFieldError(fieldId, message) {
     const field = document.getElementById(fieldId);
+    if (!field) return;
+
     const errorDiv = field.parentElement.querySelector('.form-error') || document.createElement('div');
 
     errorDiv.className = 'form-error';
@@ -1083,6 +1035,19 @@ function showFieldError(fieldId, message) {
 
     field.classList.add('is-invalid');
     field.focus();
+}
+
+// <CHANGE> Added function to clear field errors when user fixes input
+function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    const errorDiv = field.parentElement.querySelector('.form-error');
+    if (errorDiv) {
+        errorDiv.remove();
+    }
+
+    field.classList.remove('is-invalid');
 }
 
 // Camera functionality
@@ -1102,10 +1067,21 @@ document.getElementById('remove-photo').addEventListener('click', function() {
     removePhoto();
 });
 
+// <CHANGE> Added event listener for file input
+document.getElementById('foto').addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            showPhotoPreview(event.target.result);
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
 async function startCamera() {
     try {
         stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment' } // Use back camera if available
+            video: { facingMode: 'environment' }
         });
 
         const video = document.getElementById('video');
@@ -1164,3 +1140,5 @@ function removePhoto() {
     document.getElementById('photo-preview').style.display = 'none';
     document.getElementById('camera-btn').classList.add('active');
 }
+</script>
+@endsection
