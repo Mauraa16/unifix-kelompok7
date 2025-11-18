@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\MahasiswaController; // Untuk Admin
 use App\Http\Controllers\Admin\PetugasController; // Untuk Admin
 use App\Http\Controllers\Admin\KelolaLaporanController; // Untuk Admin & Petugas
 use App\Http\Controllers\Petugas\ProfilPetugasController; //untuk petugas
-
+use App\Http\Controllers\Petugas\PetugasLaporanController; //untuk petugas
 
 /*
 |--------------------------------------------------------------------------
@@ -45,74 +45,50 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(functi
 
 
 
-// ====================================================================
-// RUTE KHUSUS PETUGAS (role:petugas)
-// ====================================================================
+
 Route::middleware(['auth', 'role:petugas'])
     ->prefix('petugas')
     ->name('petugas.')
     ->group(function () {
 
-    /* ===========================
-       DASHBOARD PETUGAS
-    ============================ */
-    Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])
-        ->name('dashboard.index');
-    // View: petugas/dashboard/index.blade.php
+        Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])
+            ->name('dashboard.index');
 
+        // LAPORAN
+        Route::get('/laporan', [PetugasLaporanController::class, 'index'])
+            ->name('laporan.index');
 
-    /* ===========================
-       LAPORAN
-    ============================ */
-    Route::get('/laporan', [LaporanController::class, 'index'])
-        ->name('laporan.index');
-    // View: petugas/laporan/index.blade.php
+        Route::get('/laporan/{laporan}', [PetugasLaporanController::class, 'show'])
+            ->name('laporan.show');
 
-    Route::get('/laporan/{laporan}', [LaporanController::class, 'show'])
-        ->whereNumber('laporan')
-        ->name('laporan.show');
-    // View: petugas/laporan/show.blade.php
+        Route::put('/laporan/{laporan}/status', [PetugasLaporanController::class, 'updateStatus'])
+            ->name('laporan.updateStatus');
 
-    Route::put('/laporan/{laporan}/status', [LaporanController::class, 'updateStatus'])
-        ->whereNumber('laporan')
-        ->name('laporan.updateStatus');
+        Route::post('/laporan/{laporan}/komentar', [PetugasLaporanController::class, 'storeKomentar'])
+            ->name('laporan.storeKomentar');
 
-    Route::post('/laporan/{laporan}/komentar', [LaporanController::class, 'storeKomentar'])
-        ->whereNumber('laporan')
-        ->name('laporan.storeKomentar');
+        // FILTER STATUS
+        Route::get('/laporan/status/belum-diproses', [PetugasLaporanController::class, 'filterBelum'])
+            ->name('laporan.belum');
 
+        Route::get('/laporan/status/diproses', [PetugasLaporanController::class, 'filterDiproses'])
+            ->name('laporan.proses');
 
-    /* ===========================
-       FILTER STATUS LAPORAN
-    ============================ */
-    Route::get('/laporan/status/belum-diproses', [LaporanController::class, 'filterBelumDiproses'])
-        ->name('laporan.belum');
+        Route::get('/laporan/status/selesai', [PetugasLaporanController::class, 'filterSelesai'])
+            ->name('laporan.selesai');
 
-    Route::get('/laporan/status/diproses', [LaporanController::class, 'filterDiproses'])
-        ->name('laporan.proses');
+        // RIWAYAT
+        Route::get('/riwayat', [PetugasLaporanController::class, 'riwayat'])
+            ->name('riwayat');
 
-    Route::get('/laporan/status/selesai', [LaporanController::class, 'filterSelesai'])
-        ->name('laporan.selesai');
+        // PROFIL PETUGAS
+        Route::get('/profil', [ProfilPetugasController::class, 'show'])
+            ->name('profil');
 
-
-    /* ===========================
-       RIWAYAT PETUGAS
-    ============================ */
-    Route::get('/riwayat', [LaporanController::class, 'riwayat'])
-        ->name('riwayat');
-    // View: petugas/riwayat/index.blade.php
-
-
-    /* ===========================
-       PROFIL PETUGAS
-    ============================ */
-    Route::get('/profil', [ProfilPetugasController::class, 'show'])
-        ->name('profil');
-    // View: petugas/profil/index.blade.php
-
-    Route::put('/profil/update', [ProfilPetugasController::class, 'update'])
-        ->name('profil.update');
+        Route::put('/profil/update', [ProfilPetugasController::class, 'update'])
+            ->name('profil.update');
 });
+
 
 
 

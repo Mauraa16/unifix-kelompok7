@@ -27,9 +27,9 @@
                     </a>
 
                     {{-- Semua Laporan --}}
-                    <a href="{{ route('laporan.index') }}"
+                    <a href="{{ route('petugas.laporan.index') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition
-                              {{ request()->is('petugas/laporan/index') 
+                              {{ request()->routeIs('petugas.laporan.*') 
                                     ? 'bg-purple-900 bg-opacity-50' 
                                     : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-clipboard-list mr-1"></i> Laporan
@@ -38,7 +38,7 @@
                     {{-- Riwayat --}}
                     <a href="{{ route('petugas.riwayat') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition
-                              {{ request()->is('petugas/riwayat') 
+                              {{ request()->routeIs('petugas.riwayat') 
                                     ? 'bg-purple-900 bg-opacity-50' 
                                     : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-history mr-1"></i> Riwayat
@@ -47,7 +47,7 @@
                     {{-- Profil --}}
                     <a href="{{ route('petugas.profil') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition
-                              {{ request()->is('petugas/profil') 
+                              {{ request()->routeIs('petugas.profil') 
                                     ? 'bg-purple-900 bg-opacity-50' 
                                     : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-user mr-1"></i> Profil
@@ -109,19 +109,19 @@
 
             <a href="{{ route('petugas.laporan.index') }}"
                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 
-                      {{ request()->is('petugas/laporan') ? 'bg-purple-900' : '' }}">
+                      {{ request()->routeIs('petugas.laporan.*') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-clipboard-list mr-2"></i> Laporan
             </a>
 
             <a href="{{ route('petugas.riwayat') }}"
                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 
-                      {{ request()->is('petugas/riwayat') ? 'bg-purple-900' : '' }}">
+                      {{ request()->routeIs('petugas.riwayat') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-history mr-2"></i> Riwayat
             </a>
 
             <a href="{{ route('petugas.profil') }}"
                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 
-                      {{ request()->is('petugas/profil') ? 'bg-purple-900' : '' }}">
+                      {{ request()->routeIs('petugas.profil') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-user mr-2"></i> Profil
             </a>
 

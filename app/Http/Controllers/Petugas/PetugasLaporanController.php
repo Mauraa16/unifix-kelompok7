@@ -8,7 +8,7 @@ use App\Models\Komentar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LaporanController extends Controller
+class PetugasLaporanController extends Controller
 {
     public function __construct()
     {
