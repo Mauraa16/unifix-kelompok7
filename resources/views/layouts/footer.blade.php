@@ -1,85 +1,262 @@
-<!-- Modern Footer -->
-<footer class="modern-footer">
-    <div class="footer-container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <span class="logo-icon">🚀</span>
+<!-- UNIFIX Footer - Umum -->
+<footer class="bg-gradient-to-b from-gray-900 to-purple-900 text-white">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            <!-- Brand Section -->
+            <div class="lg:col-span-1">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg mr-3">
+                        <i class="fas fa-tools text-purple-600 text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white">UNIFIX</span>
                 </div>
-                <span class="footer-brand-text">{{ config('app.name', 'UNIFIX') }}</span>
-                <p class="footer-description">Sistem Pelaporan Kerusakan Fasilitas Universitas dengan Teknologi Modern.</p>
+                <p class="text-purple-200 text-sm leading-relaxed mb-4">
+                    Sistem Pelaporan dan Perbaikan Fasilitas Universitas Terintegrasi. 
+                    Memberikan solusi cepat dan efisien untuk maintenance kampus.
+                </p>
+                <div class="flex items-center text-purple-200 text-sm">
+                    <i class="fas fa-university mr-2"></i>
+                    <span>Layanan Maintenance Kampus</span>
+                </div>
             </div>
 
-            <div class="footer-links">
-                <div class="footer-section">
-                    <h4 class="footer-title">Quick Links</h4>
-                    <ul class="footer-list">
-                        <li><a href="{{ url('/') }}">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
+            <!-- Layanan -->
+            <div class="lg:col-span-1">
+                <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fas fa-concierge-bell mr-2 text-purple-300"></i>
+                    Layanan
+                </h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Pelaporan Kerusakan
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Tracking Perbaikan
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Status Laporan
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Bantuan Teknis
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <div class="footer-section">
-                    <h4 class="footer-title">Resources</h4>
-                    <ul class="footer-list">
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Blog</a></li>
-                    </ul>
-                </div>
+            <!-- Support -->
+            <div class="lg:col-span-1">
+                <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fas fa-headset mr-2 text-purple-300"></i>
+                    Bantuan
+                </h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Pusat Bantuan
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Panduan Penggunaan
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                            Kontak Support
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <div class="footer-section">
-                    <h4 class="footer-title">Legal</h4>
-                    <ul class="footer-list">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4 class="footer-title">Contact Us</h4>
-                    <form action="{{ route('contact.submit') }}" method="POST" class="footer-contact-form">
-                        @csrf
-                        <input type="text" name="name" placeholder="Your Name" required class="footer-input">
-                        <input type="email" name="email" placeholder="Your Email" required class="footer-input">
-                        <textarea name="message" placeholder="Your Message" required class="footer-textarea"></textarea>
-                        <button type="submit" class="footer-submit-btn">Send Message</button>
-                    </form>
+            <!-- Kontak & Info -->
+            <div class="lg:col-span-1">
+                <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-purple-300"></i>
+                    Informasi
+                </h4>
+                <div class="space-y-3">
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fas fa-clock mr-3 text-purple-300"></i>
+                        <span>Senin - Jumat: 08:00 - 16:00</span>
+                    </div>
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fas fa-phone mr-3 text-purple-300"></i>
+                        <span>+62 (021) 1234-5678</span>
+                    </div>
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fas fa-envelope mr-3 text-purple-300"></i>
+                        <span>support@unifix.ac.id</span>
+                    </div>
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fas fa-map-marker-alt mr-3 text-purple-300"></i>
+                        <span>Gedung Rektorat Lt. 2</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="footer-bottom">
-            <div class="footer-social">
-                <a href="#" class="social-link" aria-label="Facebook">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-link" aria-label="Twitter">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-link" aria-label="LinkedIn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-link" aria-label="GitHub">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                </a>
-            </div>
+        <!-- Bottom Footer -->
+        <div class="border-t border-purple-700 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <!-- Copyright -->
+                <div class="mb-4 md:mb-0">
+                    <p class="text-purple-300 text-sm">
+                        &copy; {{ date('Y') }} <span class="font-semibold text-white">UNIFIX</span>. 
+                        All rights reserved.
+                    </p>
+                    <p class="text-purple-400 text-xs mt-1">
+                        Sistem Pelaporan Fasilitas Universitas
+                    </p>
+                </div>
 
-            <div class="footer-copyright">
-                <p>&copy; {{ date('Y') }} {{ config('app.name', 'UNIFIX') }}. All rights reserved.</p>
+                <!-- Social Links -->
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
+                       aria-label="Facebook UNIFIX">
+                        <i class="fab fa-facebook-f text-white group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
+                       aria-label="Twitter UNIFIX">
+                        <i class="fab fa-twitter text-white group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
+                       aria-label="Instagram UNIFIX">
+                        <i class="fab fa-instagram text-white group-hover:scale-110 transition-transform"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
+                       aria-label="Email UNIFIX">
+                        <i class="fas fa-envelope text-white group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Legal Links -->
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
+                        Kebijakan Privasi
+                    </a>
+                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
+                        Syarat & Ketentuan
+                    </a>
+                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
+                        Sitemap
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- University Badge -->
+        <div class="mt-6 pt-6 border-t border-purple-700">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left">
+                    <p class="text-purple-400 text-xs">
+                        Layanan Resmi Maintenance Fasilitas Kampus
+                    </p>
+                </div>
+                <div class="mt-2 md:mt-0">
+                    <div class="flex items-center space-x-2 text-purple-300 text-sm">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Terpercaya • Aman • Terintegrasi</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </footer>
+
+<!-- Quick Support Button (Fixed) -->
+<div class="fixed bottom-6 right-6 z-50">
+    <button class="w-14 h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+            onclick="openSupportModal()">
+        <i class="fas fa-headset text-xl"></i>
+        <span class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full text-xs flex items-center justify-center animate-pulse">
+            <i class="fas fa-bolt"></i>
+        </span>
+    </button>
+</div>
+
+<!-- Support Modal (Hidden by default) -->
+<div id="supportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all">
+        <div class="bg-gradient-to-r from-purple-600 to-purple-700 p-6 rounded-t-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-white font-bold text-lg flex items-center">
+                    <i class="fas fa-headset mr-2"></i>
+                    Butuh Bantuan?
+                </h3>
+                <button onclick="closeSupportModal()" class="text-white hover:text-purple-200 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">
+                Tim support kami siap membantu Anda 24/7. Pilih metode kontak yang prefered:
+            </p>
+            
+            <div class="space-y-3">
+                <a href="tel:+622112345678" 
+                   class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-purple-50 transition-colors group">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3 group-hover:bg-green-200 transition-colors">
+                        <i class="fas fa-phone text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800">Telepon</p>
+                        <p class="text-sm text-gray-600">+62 (021) 1234-5678</p>
+                    </div>
+                </a>
+                
+                <a href="mailto:support@unifix.ac.id" 
+                   class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-purple-50 transition-colors group">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
+                        <i class="fas fa-envelope text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800">Email</p>
+                        <p class="text-sm text-gray-600">support@unifix.ac.id</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openSupportModal() {
+    document.getElementById('supportModal').classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+}
+
+function closeSupportModal() {
+    document.getElementById('supportModal').classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('supportModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeSupportModal();
+    }
+});
+</script>
