@@ -1,307 +1,195 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Page Header -->
-<section class="page-header">
-    <div class="container">
-        <div class="page-header-content">
-            <h1 class="page-title">🧾 Detail Laporan</h1>
-            <p class="page-subtitle">Informasi lengkap tentang laporan kerusakan fasilitas</p>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">🏠 Beranda</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('laporan.index') }}">📋 Kelola Laporan</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Detail Laporan</li>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Tombol Kembali & Navigasi Breadcrumb -->
+        <div class="mb-6">
+            <nav aria-label="breadcrumb" class="text-sm text-gray-500 mb-2">
+                <ol class="flex space-x-2">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}" class="hover:text-purple-600 transition">Beranda</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="mx-1">/</span>
+                        <a href="{{ route('laporan.index') }}" class="hover:text-purple-600 transition">Kelola Laporan</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span class="mx-1">/</span>
+                        <span class="font-medium text-gray-700">Detail Laporan</span>
+                    </li>
                 </ol>
             </nav>
+            <a href="{{ route('laporan.index') }}" 
+               class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Kembali ke Laporan Saya
+            </a>
         </div>
-    </div>
-</section>
-
-<!-- Report Detail Section -->
-<section class="reports-section">
-    <div class="container">
-        <div class="report-detail-card">
-            <div class="report-detail-header">
-                <div class="report-detail-actions">
-                    <a href="{{ route('laporan.index') }}" class="btn-back">
-                        <i class="fas fa-arrow-left"></i> Kembali ke Daftar
-                    </a>
+        
+        <!-- Kartu Detail Laporan -->
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            
+            <!-- Banner Status Laporan -->
+            <div class="px-6 py-4 {{ $laporan->status == 'Selesai' ? 'bg-green-50 border-b border-green-100' : ($laporan->status == 'Diproses' ? 'bg-blue-50 border-b border-blue-100' : 'bg-yellow-50 border-b border-yellow-100') }}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="p-2 rounded-full {{ $laporan->status == 'Selesai' ? 'bg-green-200 text-green-700' : ($laporan->status == 'Diproses' ? 'bg-blue-200 text-blue-700' : 'bg-yellow-200 text-yellow-700') }} mr-3">
+                            <!-- Ikon berdasarkan status -->
+                            @if($laporan->status == 'Selesai')
+                                <i class="fas fa-check"></i>
+                            @elseif($laporan->status == 'Diproses')
+                                <i class="fas fa-tools"></i>
+                            @else
+                                <i class="fas fa-clock"></i>
+                            @endif
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider {{ $laporan->status == 'Selesai' ? 'text-green-800' : ($laporan->status == 'Diproses' ? 'text-blue-800' : 'text-yellow-800') }}">
+                                Status Laporan
+                            </p>
+                            <p class="text-lg font-bold {{ $laporan->status == 'Selesai' ? 'text-green-900' : ($laporan->status == 'Diproses' ? 'text-blue-900' : 'text-yellow-900') }}">
+                                {{ $laporan->status }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500">Tanggal Lapor</p>
+                        <p class="text-sm font-medium text-gray-700">{{ $laporan->created_at->format('d M Y') }}</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="report-detail-content">
-                <div class="report-detail-main">
-                    <div class="report-detail-info">
-                        <h2 class="report-detail-title">{{ $laporan->judul }}</h2>
+            <!-- Isi Laporan -->
+            <div class="p-8">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $laporan->judul }}</h1>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                        <i class="fas fa-tag mr-2 text-gray-500"></i> {{ $laporan->kategori->nama_kategori }}
+                    </span>
+                </div>
 
-                        <div class="report-detail-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-tags"></i>
-                                <span><strong>Kategori:</strong> {{ $laporan->kategori->nama_kategori }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span><strong>Lokasi:</strong> {{ $laporan->lokasi }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span><strong>Tanggal Dibuat:</strong> {{ $laporan->created_at->format('d/m/Y H:i') }}</span>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Kiri: Teks Detail -->
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Detail Masalah</h3>
+                        <p class="text-gray-700 leading-relaxed mb-6">
+                            {{ $laporan->deskripsi }}
+                        </p>
 
-                        <div class="report-detail-status">
-                            <span class="status-badge status-{{ strtolower(str_replace(' ', '-', $laporan->status)) }}">
-                                @if($laporan->status == 'Belum Diproses')
-                                    <i class="fas fa-clock"></i>
-                                @elseif($laporan->status == 'Diproses')
-                                    <i class="fas fa-cogs"></i>
-                                @else
-                                    <i class="fas fa-check-circle"></i>
-                                @endif
-                                {{ $laporan->status }}
-                            </span>
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Lokasi</h3>
+                        <div class="flex items-center text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                            <i class="fas fa-map-marker-alt text-red-500 mr-3"></i>
+                            {{ $laporan->lokasi }}
                         </div>
                     </div>
 
-                    @if($laporan->foto)
-                        <div class="report-detail-image">
-                            <img src="{{ asset('storage/' . $laporan->foto) }}" alt="Foto Laporan" loading="lazy">
+                    <!-- Kanan: Foto -->
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Bukti Foto</h3>
+                        @if ($laporan->foto)
+                            <!-- Tautan untuk memperbesar gambar di tab baru -->
+                            <a href="{{ Storage::url($laporan->foto) }}" target="_blank" title="Klik untuk memperbesar">
+                                <img src="{{ Storage::url($laporan->foto) }}" alt="Bukti Laporan" class="w-full h-64 object-cover rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:opacity-90 transition">
+                            </a>
+                        @else
+                            <div class="w-full h-64 bg-gray-100 rounded-xl border border-gray-200 border-dashed flex flex-col items-center justify-center text-gray-400">
+                                <i class="fas fa-image-slash text-4xl mb-2"></i>
+                                <span>Tidak ada foto terlampir</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Timeline / Komentar -->
+            <div class="bg-gray-50 p-8 border-t border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800 mb-6">Riwayat & Tanggapan</h3>
+
+                <div class="space-y-6">
+                    <!-- Item 1: Laporan Dibuat (Selalu ada) -->
+                    <div class="flex gap-4">
+                        <!-- Ikon & Garis Waktu -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white z-10 shadow-md">
+                                <i class="fas fa-file-alt text-xs"></i>
+                            </div>
+                            <!-- Garis vertikal -->
+                            @if($laporan->komentar->count() > 0 || $laporan->status != 'Selesai')
+                            <div class="h-full w-0.5 bg-gray-200 my-1"></div>
+                            @endif
                         </div>
+                        <!-- Konten -->
+                        <div class="pb-6">
+                            <p class="text-sm font-bold text-gray-900">Laporan Terkirim</p>
+                            <p class="text-xs text-gray-500">{{ $laporan->created_at->format('d F Y, H:i') }}</p>
+                            <p class="text-sm text-gray-600 mt-1">Anda mengirim laporan ini.</p>
+                        </div>
+                    </div>
+
+                    <!-- Loop Komentar Petugas/Admin -->
+                    @foreach ($laporan->komentar as $komentar)
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white z-10 shadow-md">
+                                <i class="fas fa-comment-dots text-xs"></i>
+                            </div>
+                            <!-- Garis penghubung (kecuali item terakhir) -->
+                            @if(!$loop->last || $laporan->status == 'Selesai')
+                            <div class="h-full w-0.5 bg-gray-200 my-1"></div>
+                            @endif
+                        </div>
+                        <div class="pb-6 w-full">
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-blue-700 text-sm">{{ $komentar->user->name }} <span class="text-xs font-normal text-gray-500">({{ ucfirst($komentar->user->role) }})</span></span>
+                                    <span class="text-xs text-gray-400">{{ $komentar->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-sm text-gray-700">{{ $komentar->isi_komentar }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <!-- Status Selesai (Jika ada) -->
+                    @if($laporan->status == 'Selesai')
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white z-10 shadow-md">
+                                <i class="fas fa-check-circle text-xs"></i>
+                            </div>
+                        </div>
+                        <div class="pt-1.5">
+                            <p class="text-sm font-bold text-green-700">Laporan Selesai</g_p>
+                            <p class="text-sm text-gray-600 mt-1">Laporan ini telah ditandai sebagai "Selesai".</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Jika belum ada komentar dan belum selesai -->
+                    @if($laporan->komentar->isEmpty() && $laporan->status != 'Selesai')
+                    <div class="flex gap-4 opacity-50">
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white z-10">
+                                <i class="fas fa-ellipsis-h text-xs"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mt-1.5">Menunggu tanggapan petugas...</p>
+                        </div>
+                    </div>
                     @endif
                 </div>
-
-                <div class="report-detail-description">
-                    <h3 class="description-title">
-                        <i class="fas fa-align-left"></i> Deskripsi Lengkap
-                    </h3>
-                    <div class="description-content">
-                        <p>{{ $laporan->deskripsi }}</p>
-                    </div>
-                </div>
-
-                @if($laporan->komentar->count() > 0)
-                    <div class="report-comments">
-                        <h3 class="comments-title">
-                            <i class="fas fa-comments"></i> Komentar ({{ $laporan->komentar->count() }})
-                        </h3>
-                        <div class="comments-list">
-                            @foreach($laporan->komentar as $komentar)
-                                <div class="comment-item">
-                                    <div class="comment-header">
-                                        <div class="comment-author">
-                                            <i class="fas fa-user-circle"></i>
-                                            <span>{{ $komentar->user->name }}</span>
-                                        </div>
-                                        <div class="comment-date">
-                                            <i class="fas fa-clock"></i>
-                                            <span>{{ $komentar->created_at->format('d/m/Y H:i') }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="comment-content">
-                                        <p>{{ $komentar->isi_komentar }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<style>
-/* ==== General Style ==== */
-body {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #2e2e2e;
-}
+{{-- 
+==========================================================
+PERBAIKAN: Seluruh <style>...</style> dihapus dari sini
+==========================================================
+--}}
 
-/* ==== Page Header ==== */
-.page-header {
-    padding: 60px 0 30px;
-    text-align: center;
-    color: white;
-}
-
-.page-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.page-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-.breadcrumb {
-    display: inline-flex;
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    padding: 8px 20px;
-}
-
-.breadcrumb-item a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.breadcrumb-item.active {
-    color: #ffd6ff;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-    content: "›";
-    margin: 0 8px;
-    color: #fff;
-}
-
-/* ==== Report Detail Card ==== */
-.report-detail-card {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 30px 40px;
-    margin: 40px auto;
-    color: white;
-    max-width: 900px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    animation: fadeIn 0.8s ease-in-out;
-}
-
-/* ==== Buttons ==== */
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    border: 2px solid #fff;
-    border-radius: 8px;
-    color: #fff;
-    padding: 8px 16px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s;
-}
-
-.btn-back:hover {
-    background: rgba(255,255,255,0.2);
-    transform: translateX(-4px);
-}
-
-/* ==== Detail Info ==== */
-.report-detail-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.report-detail-meta {
-    display: grid;
-    gap: 10px;
-    font-size: 0.95rem;
-    margin-bottom: 15px;
-}
-
-.meta-item i {
-    margin-right: 6px;
-    color: #ffd6ff;
-}
-
-/* ==== Status Badge ==== */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 6px 14px;
-    border-radius: 50px;
-    margin-top: 5px;
-}
-
-.status-belum-diproses {
-    background: #ffb347;
-    color: #333;
-}
-
-.status-diproses {
-    background: #6dd5ed;
-    color: #333;
-}
-
-.status-selesai {
-    background: #9df89d;
-    color: #333;
-}
-
-/* ==== Image ==== */
-.report-detail-image img {
-    width: 100%;
-    border-radius: 15px;
-    margin-top: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s;
-}
-.report-detail-image img:hover {
-    transform: scale(1.03);
-}
-
-/* ==== Description ==== */
-.report-detail-description {
-    margin-top: 30px;
-}
-.description-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #fff;
-}
-.description-content p {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    border-radius: 10px;
-    line-height: 1.6;
-}
-
-/* ==== Comments ==== */
-.report-comments {
-    margin-top: 35px;
-}
-.comments-title {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
-.comment-item {
-    background: rgba(255,255,255,0.12);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    transition: transform 0.3s;
-}
-.comment-item:hover {
-    transform: translateY(-3px);
-}
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-    color: #ffd6ff;
-}
-.comment-content p {
-    margin: 0;
-    color: #fff;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
 @endsection

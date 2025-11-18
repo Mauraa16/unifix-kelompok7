@@ -23,15 +23,15 @@
                        <i class="fas fa-user-graduate mr-1"></i> Kelola Mahasiswa
                     </a>
 
-                    {{-- Link Kelola Petugas (BARU) --}}
+                    {{-- Link Kelola Petugas --}}
                     <a href="{{ route('petugas.index') }}" 
                        class="px-3 py-2 rounded-md text-sm font-medium transition
                               {{ request()->is('admin/petugas*') ? 'bg-purple-900 bg-opacity-50' : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                        <i class="fas fa-user-shield mr-1"></i> Kelola Petugas
                     </a>
 
-                    {{-- Link Kelola Laporan --}}
-                    <a href="#" {{-- Ganti # dengan route('laporan.index') jika sudah ada --}}
+                    {{-- Link Kelola Laporan (SUDAH DIPERBAIKI) --}}
+                    <a href="{{ route('admin.laporan.index') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition
                               {{ request()->is('admin/laporan*') ? 'bg-purple-900 bg-opacity-50' : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                        <i class="fas fa-clipboard-list mr-1"></i> Kelola Laporan
@@ -85,7 +85,7 @@
             <a href="{{ route('petugas.index') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 {{ request()->is('admin/petugas*') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-user-shield mr-2"></i> Kelola Petugas
             </a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 {{ request()->is('admin/laporan*') ? 'bg-purple-900' : '' }}">
+            <a href="{{ route('admin.laporan.index') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 {{ request()->is('admin/laporan*') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-clipboard-list mr-2"></i> Kelola Laporan
             </a>
             

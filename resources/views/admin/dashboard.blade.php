@@ -8,11 +8,9 @@
                 <h1 class="text-3xl font-bold text-gray-800">Dashboard Admin</h1>
                 <p class="text-gray-600 mt-1">Selamat datang kembali, Admin. Berikut ringkasan aktivitas hari ini.</p>
             </div>
-            <div class="mt-4 md:mt-0">
-                <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-200 flex items-center">
-                    <i class="fas fa-download mr-2"></i> Export Laporan
-                </button>
-            </div>
+            
+            {{-- PERBAIKAN: Tombol "Export Laporan" sudah dihapus --}}
+
         </div>
     </div>
 
@@ -25,7 +23,6 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Users</p>
-                        {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                         <p class="text-3xl font-bold text-gray-900 mt-1">{{ $totalUsers }}</p>
                     </div>
                     <div class="p-3 rounded-full bg-purple-100 text-purple-600">
@@ -42,7 +39,6 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Laporan</p>
-                        {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                         <p class="text-3xl font-bold text-gray-900 mt-1">{{ $totalLaporan }}</p>
                     </div>
                     <div class="p-3 rounded-full bg-blue-100 text-blue-600">
@@ -59,7 +55,6 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Perlu Tindakan</p>
-                        {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                         <p class="text-3xl font-bold text-gray-900 mt-1">{{ $laporanPending }}</p>
                     </div>
                     <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
@@ -76,7 +71,6 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Selesai</p>
-                        {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                         <p class="text-3xl font-bold text-gray-900 mt-1">{{ $laporanSelesai }}</p>
                     </div>
                     <div class="p-3 rounded-full bg-green-100 text-green-600">
@@ -94,12 +88,11 @@
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h2 class="text-lg font-bold text-gray-800">Laporan Masuk Terbaru</h2>
-                    {{-- CATATAN: Link 'Lihat Semua' ini perlu Rute Laporan --}}
-                    <a href="#" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Lihat Semua</a>
+                    {{-- PERBAIKAN: Link "Lihat Semua" diarahkan ke route 'admin.laporan.index' --}}
+                    <a href="{{ route('admin.laporan.index') }}" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Lihat Semua</a>
                 </div>
                 
                 <div class="divide-y divide-gray-100">
-                    {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                     @forelse($recentLaporan as $laporan)
                     <div class="p-4 hover:bg-gray-50 transition duration-150">
                         <div class="flex items-start justify-between">
@@ -122,8 +115,8 @@
                                     {{ $laporan->status == 'Sudah Diproses' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                                     {{ $laporan->status }}
                                 </span>
-                                {{-- CATATAN: 'laporan.show' perlu Rute Laporan --}}
-                                <a href="{{-- route('laporan.show', $laporan) --}}#" class="text-gray-400 hover:text-purple-600 transition">
+                                {{-- PERBAIKAN: Link chevron diarahkan ke route 'admin.laporan.show' --}}
+                                <a href="{{ route('admin.laporan.show', $laporan->id) }}" class="text-gray-400 hover:text-purple-600 transition">
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </div>
@@ -146,7 +139,6 @@
                     <h2 class="text-lg font-bold text-gray-800">User Baru</h2>
                 </div>
                 <div class="divide-y divide-gray-100">
-                    {{-- DIUBAH: Menggunakan variabel dari HomeController --}}
                     @forelse($recentUsers as $user)
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition">
                         <div class="flex items-center space-x-3">
@@ -169,7 +161,7 @@
                     @endforelse
                 </div>
                 <div class="p-4 border-t border-gray-100 bg-gray-50 text-center">
-                    {{-- DIUBAH: Link ke Rute Kelola Mahasiswa/User --}}
+                    {{-- Link ini sudah benar mengarah ke kelola mahasiswa --}}
                     <a href="{{ route('mahasiswa.index') }}" class="text-sm text-purple-600 font-semibold hover:underline">Kelola Semua User</a>
                 </div>
             </div>
