@@ -739,6 +739,59 @@ body {
     margin: 0;
 }
 
+/* Footer Contact Form Styles */
+.footer-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-input,
+.footer-textarea {
+    padding: 10px 12px;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+    transition: all 0.3s ease;
+}
+
+.footer-input:focus,
+.footer-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.footer-input::placeholder,
+.footer-textarea::placeholder {
+    color: #6b7280;
+}
+
+.footer-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.footer-submit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.footer-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu {

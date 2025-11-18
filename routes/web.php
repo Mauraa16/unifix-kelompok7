@@ -1,38 +1,73 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+// Import Controller agar tidak error
+use App\Http\Controllers\HomeController; 
+use App\Http\Controllers\Admin\MahasiswaController;
+use App\Http\Controllers\Admin\PetugasController; // <-- PERBAIKAN 1: Tambahkan ini
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+// Redirect root ke login
 Route::redirect('/', '/login');
 
+// Routes Auth bawaan Laravel
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// ====================================================================
+// RUTE UTAMA (PENJAGA GERBANG)
+// ====================================================================
+// Ini akan mengecek role dan melempar user ke dashboard yang sesuai
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
-    Route::resource('laporan', App\Http\Controllers\LaporanController::class);
+
+// ====================================================================
+// RUTE KHUSUS MAHASISWA
+// ====================================================================
+Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(function () {
+    
+    // Beranda Mahasiswa (Memanggil fungsi mahasiswaBeranda di HomeController)
+    Route::get('/beranda', [HomeController::class, 'mahasiswaBeranda'])->name('mahasiswa.beranda');
+    
+    // CRUD Laporan
+    Route::resource('laporan', LaporanController::class);
 });
 
-// Routes untuk Petugas (contoh - bisa disesuaikan)
-Route::middleware(['auth', 'role:petugas'])->group(function () {
-    Route::get('/petugas/dashboard', function () {
-        return view('petugas.dashboard');
-    })->name('petugas.dashboard');
+
+// ====================================================================
+// RUTE KHUSUS PETUGAS
+// ====================================================================
+Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->group(function () {
+    
+    // Dashboard Petugas (Memanggil fungsi petugasDashboard di HomeController)
+    Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])->name('petugas.dashboard');
 });
 
-// Routes untuk Admin (contoh - bisa disesuaikan)
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+
+// ====================================================================
+// RUTE KHUSUS ADMIN
+// ====================================================================
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    
+    // Dashboard Admin (PENTING: Panggil via Controller agar data statistik muncul)
+    Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
+    
+    // CRUD Kelola Mahasiswa 
+    Route::resource('mahasiswa', MahasiswaController::class);
+
+    // PERBAIKAN 2: Tambahkan rute resource untuk Petugas
+    Route::resource('petugas', PetugasController::class);
 });
+
+
+// ====================================================================
+// RUTE LAINNYA
+// ====================================================================
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');

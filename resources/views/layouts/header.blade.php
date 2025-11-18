@@ -39,31 +39,27 @@
           </a>
         @endif
       @else
-        <div class="user-menu">
-          <div class="user-info">
-            <button class="user-btn" onclick="toggleUserDropdown()">
-              <div class="user-avatar">
-                <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-              </div>
-              <span class="user-name">{{ Auth::user()->name }}</span>
-              <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              </svg>
-            </button>
-          </div>
+        {{-- =============================================== --}}
+        {{-- PERBAIKAN: GANTI DROPDOWN DENGAN TOMBOL LOGOUT LANGSUNG --}}
+        {{-- =============================================== --}}
+        <div class="user-profile-section">
+            <!-- Info Profil (Tidak bisa diklik, hanya tampilan) -->
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                </div>
+                <span class="profile-name">{{ Auth::user()->name }}</span>
+            </div>
 
-          <div class="user-dropdown" id="userDropdown">
-            <hr class="dropdown-divider">
-            <a class="dropdown-item logout-item" href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <span>Logout</span>
-            </a>
-          </div>
+            <!-- Tombol Logout -->
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="simple-logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Keluar</span>
+                </button>
+            </form>
         </div>
-
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-          @csrf
-        </form>
       @endguest
     </div>
 
@@ -76,7 +72,7 @@
   </nav>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu hidden" id="mobileMenu">
     <div class="mobile-menu-content">
       @auth
         @if(auth()->user()->role == 'mahasiswa')
@@ -106,12 +102,15 @@
             </div>
             <span class="mobile-user-name">{{ Auth::user()->name }}</span>
           </div>
-          <a href="#" class="mobile-nav-link">Profile</a>
-          <a href="#" class="mobile-nav-link">Settings</a>
+          <a href="#" class="mobile-nav-link"><i class="fas fa-user-circle"></i> Profile</a>
           <a class="mobile-nav-link logout-link" href="{{ route('logout') }}"
-             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+             onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
             <i class="fas fa-sign-out-alt"></i> Keluar
           </a>
+          {{-- Form Logout untuk Mobile --}}
+          <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="hidden">
+            @csrf
+          </form>
         @endguest
       </div>
     </div>
@@ -125,7 +124,7 @@
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   padding: 8px 25px;
   color: white;
-  position: fixed; /* ✅ ubah dari sticky ke fixed */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -155,7 +154,6 @@
   transform: scale(1.04);
 }
 
-/* Nav links */
 .nav-menu {
   display: flex;
   gap: 18px;
@@ -175,7 +173,6 @@
   text-decoration: underline;
 }
 
-/* Auth Buttons */
 .nav-auth {
   display: flex;
   gap: 10px;
@@ -214,38 +211,69 @@
   background: #5a0fb5;
 }
 
-/* User Info */
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* =============================================== */
+/* == CSS BARU UNTUK PROFIL & TOMBOL LOGOUT == */
+/* =============================================== */
+
+.user-profile-section {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Jarak antara profil dan tombol logout */
 }
 
-/* Logout Button */
-.logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  text-decoration: none;
-  border-radius: 20px;
-  font-weight: 500;
-  font-size: 13px;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.profile-info {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.logout-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.profile-avatar {
+    width: 24px;
+    height: 24px;
+    background-color: #ffffff;
+    color: #6a11cb;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    margin-right: 8px;
 }
 
-.logout-btn i {
-  font-size: 14px;
+.profile-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
 }
+
+.simple-logout-btn {
+    background: rgba(255, 82, 82, 0.8); /* Warna merah */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.simple-logout-btn:hover {
+    background: rgba(217, 83, 79, 1); /* Merah lebih gelap saat hover */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* =============================================== */
+/* == CSS LAMA (DROPDOWN) SUDAH DIHAPUS == */
+/* =============================================== */
+
 
 /* Mobile */
 .mobile-menu-toggle {
@@ -271,13 +299,9 @@
     display: flex;
   }
   .mobile-menu {
-    display: none;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
     padding: 10px;
-  }
-  .mobile-menu.active {
-    display: block;
   }
   .mobile-nav-link,
   .mobile-auth-btn {
@@ -300,14 +324,36 @@
     overflow: visible !important;
   }
 
+  .mobile-auth {
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 10px;
+      margin-top: 10px;
+  }
+  .mobile-user-info {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+  }
+  .mobile-user-avatar {
+      width: 32px;
+      height: 32px;
+      background-color: #ffffff;
+      color: #6a11cb;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin-right: 10px;
+  }
+  .mobile-user-name {
+      font-weight: 600;
+  }
+  .logout-link {
+      color: #ffcdd2;
+  }
 }
 </style>
 
-<script>
-function toggleMobileMenu() {
-  document.getElementById('mobileMenu').classList.toggle('active');
-}
-function toggleUserDropdown() {
-  document.getElementById('userDropdown').classList.toggle('active');
-}
-</script>
+{{-- SCRIPT LOKAL SUDAH DIHAPUS KARENA TIDAK DIPERLUKAN LAGI --}}

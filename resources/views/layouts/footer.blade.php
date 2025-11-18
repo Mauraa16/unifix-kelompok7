@@ -39,6 +39,17 @@
                         <li><a href="#">Cookie Policy</a></li>
                     </ul>
                 </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <form action="{{ route('contact.submit') }}" method="POST" class="footer-contact-form">
+                        @csrf
+                        <input type="text" name="name" placeholder="Your Name" required class="footer-input">
+                        <input type="email" name="email" placeholder="Your Email" required class="footer-input">
+                        <textarea name="message" placeholder="Your Message" required class="footer-textarea"></textarea>
+                        <button type="submit" class="footer-submit-btn">Send Message</button>
+                    </form>
+                </div>
             </div>
         </div>
 
