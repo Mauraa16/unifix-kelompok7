@@ -10,6 +10,8 @@ use App\Http\Controllers\LaporanController; // Untuk Mahasiswa
 use App\Http\Controllers\Admin\MahasiswaController; // Untuk Admin
 use App\Http\Controllers\Admin\PetugasController; // Untuk Admin
 use App\Http\Controllers\Admin\KelolaLaporanController; // Untuk Admin & Petugas
+use App\Http\Controllers\Petugas\ProfilPetugasController; //untuk petugas
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,21 +57,21 @@ Route::middleware(['auth', 'role:petugas'])
        DASHBOARD PETUGAS
     ============================ */
     Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])
-        ->name('dashboard.index'); 
-    // view: petugas/dashboard/index.blade.php
+        ->name('dashboard.index');
+    // View: petugas/dashboard/index.blade.php
 
 
     /* ===========================
        LAPORAN
     ============================ */
     Route::get('/laporan', [LaporanController::class, 'index'])
-        ->name('laporan.index'); 
-    // view: petugas/laporan/index.blade.php
+        ->name('laporan.index');
+    // View: petugas/laporan/index.blade.php
 
     Route::get('/laporan/{laporan}', [LaporanController::class, 'show'])
         ->whereNumber('laporan')
         ->name('laporan.show');
-    // view: petugas/laporan/show.blade.php
+    // View: petugas/laporan/show.blade.php
 
     Route::put('/laporan/{laporan}/status', [LaporanController::class, 'updateStatus'])
         ->whereNumber('laporan')
@@ -81,7 +83,7 @@ Route::middleware(['auth', 'role:petugas'])
 
 
     /* ===========================
-       FILTER STATUS
+       FILTER STATUS LAPORAN
     ============================ */
     Route::get('/laporan/status/belum-diproses', [LaporanController::class, 'filterBelumDiproses'])
         ->name('laporan.belum');
@@ -98,7 +100,7 @@ Route::middleware(['auth', 'role:petugas'])
     ============================ */
     Route::get('/riwayat', [LaporanController::class, 'riwayat'])
         ->name('riwayat');
-    // view: petugas/riwayat/index.blade.php
+    // View: petugas/riwayat/index.blade.php
 
 
     /* ===========================
@@ -106,7 +108,7 @@ Route::middleware(['auth', 'role:petugas'])
     ============================ */
     Route::get('/profil', [ProfilPetugasController::class, 'show'])
         ->name('profil');
-    // view: petugas/profil/index.blade.php
+    // View: petugas/profil/index.blade.php
 
     Route::put('/profil/update', [ProfilPetugasController::class, 'update'])
         ->name('profil.update');

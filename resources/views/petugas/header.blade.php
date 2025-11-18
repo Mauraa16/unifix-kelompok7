@@ -27,9 +27,9 @@
                     </a>
 
                     {{-- Semua Laporan --}}
-                    <a href="{{ route('petugas.laporan.index') }}"
+                    <a href="{{ route('laporan.index') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition
-                              {{ request()->is('petugas/laporan') 
+                              {{ request()->is('petugas/laporan/index') 
                                     ? 'bg-purple-900 bg-opacity-50' 
                                     : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-clipboard-list mr-1"></i> Laporan
