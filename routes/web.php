@@ -68,7 +68,7 @@ Route::middleware(['auth', 'role:petugas'])
             ->name('laporan.storeKomentar');
 
         // FILTER STATUS
-        Route::get('/laporan/status/belum-diproses', [PetugasLaporanController::class, 'filterBelum'])
+        Route::get('/laporan/status/belum-diproses', [PetugasLaporanController::class, 'filterBelumDiproses'])
             ->name('laporan.belum');
 
         Route::get('/laporan/status/diproses', [PetugasLaporanController::class, 'filterDiproses'])
@@ -76,6 +76,7 @@ Route::middleware(['auth', 'role:petugas'])
 
         Route::get('/laporan/status/selesai', [PetugasLaporanController::class, 'filterSelesai'])
             ->name('laporan.selesai');
+
 
         // RIWAYAT
         Route::get('/riwayat', [PetugasLaporanController::class, 'riwayat'])

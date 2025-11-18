@@ -70,18 +70,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-orange-100 text-orange-600 mr-4">
-                        <i class="fas fa-comments text-xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-600">Komentar Diberikan</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $totalKomentar ?? 0 }}</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Laporan Table -->
