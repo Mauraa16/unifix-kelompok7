@@ -42,20 +42,76 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(functi
 });
 
 
+
 // ====================================================================
 // RUTE KHUSUS PETUGAS (role:petugas)
 // ====================================================================
-Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->group(function () {
-    
-    // Dashboard Petugas
-    Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])->name('petugas.dashboard');
+Route::middleware(['auth', 'role:petugas'])
+    ->prefix('petugas')
+    ->name('petugas.')
+    ->group(function () {
 
-    // Fitur Kelola Laporan (Tanpa Hapus/Edit)
-    Route::get('laporan', [KelolaLaporanController::class, 'index'])->name('petugas.laporan.index');
-    Route::get('laporan/{laporan}', [KelolaLaporanController::class, 'show'])->name('petugas.laporan.show');
-    Route::put('laporan/{laporan}/status', [KelolaLaporanController::class, 'updateStatus'])->name('petugas.laporan.updateStatus');
-    Route::post('laporan/{laporan}/komentar', [KelolaLaporanController::class, 'storeKomentar'])->name('petugas.laporan.storeKomentar');
+    /* ===========================
+       DASHBOARD PETUGAS
+    ============================ */
+    Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])
+        ->name('dashboard.index'); 
+    // view: petugas/dashboard/index.blade.php
+
+
+    /* ===========================
+       LAPORAN
+    ============================ */
+    Route::get('/laporan', [LaporanController::class, 'index'])
+        ->name('laporan.index'); 
+    // view: petugas/laporan/index.blade.php
+
+    Route::get('/laporan/{laporan}', [LaporanController::class, 'show'])
+        ->whereNumber('laporan')
+        ->name('laporan.show');
+    // view: petugas/laporan/show.blade.php
+
+    Route::put('/laporan/{laporan}/status', [LaporanController::class, 'updateStatus'])
+        ->whereNumber('laporan')
+        ->name('laporan.updateStatus');
+
+    Route::post('/laporan/{laporan}/komentar', [LaporanController::class, 'storeKomentar'])
+        ->whereNumber('laporan')
+        ->name('laporan.storeKomentar');
+
+
+    /* ===========================
+       FILTER STATUS
+    ============================ */
+    Route::get('/laporan/status/belum-diproses', [LaporanController::class, 'filterBelumDiproses'])
+        ->name('laporan.belum');
+
+    Route::get('/laporan/status/diproses', [LaporanController::class, 'filterDiproses'])
+        ->name('laporan.proses');
+
+    Route::get('/laporan/status/selesai', [LaporanController::class, 'filterSelesai'])
+        ->name('laporan.selesai');
+
+
+    /* ===========================
+       RIWAYAT PETUGAS
+    ============================ */
+    Route::get('/riwayat', [LaporanController::class, 'riwayat'])
+        ->name('riwayat');
+    // view: petugas/riwayat/index.blade.php
+
+
+    /* ===========================
+       PROFIL PETUGAS
+    ============================ */
+    Route::get('/profil', [ProfilPetugasController::class, 'show'])
+        ->name('profil');
+    // view: petugas/profil/index.blade.php
+
+    Route::put('/profil/update', [ProfilPetugasController::class, 'update'])
+        ->name('profil.update');
 });
+
 
 
 // ====================================================================

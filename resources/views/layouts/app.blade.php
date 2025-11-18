@@ -42,6 +42,9 @@
             @if(Auth::user()->role == 'admin')
                 {{-- Jika user adalah admin, panggil header admin --}}
                 @include('admin.header')
+
+            @elseif(Auth::user()->role === 'petugas')
+                @include('petugas.header')
             @else
                 {{-- Jika user adalah 'mahasiswa' atau 'petugas', panggil header standar --}}
                 @include('layouts.header')
@@ -52,6 +55,8 @@
         @endauth
     </header>
     {{-- ========================================================== --}}
+
+
 
     <main class="flex-grow pt-20 pb-10"> 
         @yield('content')

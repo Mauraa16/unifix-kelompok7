@@ -31,7 +31,7 @@ class HomeController extends Controller
             case 'admin':
                 return redirect()->route('admin.dashboard');
             case 'petugas':
-                return redirect()->route('petugas.dashboard');
+                return redirect()->route('petugas.dashboard.index');
             case 'mahasiswa':
                 // Redirect ke route 'mahasiswa.beranda' (lihat fungsi di bawah)
                 return redirect()->route('mahasiswa.beranda'); 
@@ -81,13 +81,54 @@ class HomeController extends Controller
     }
 
     /**
-     * PETUGAS DASHBOARD
+     * Dashboard Petugas
      */
     public function petugasDashboard()
     {
-        // View: resources/views/petugas/dashboard.blade.php
-        return view('petugas.dashboard');
+        // Statistik utama
+        $totalLaporan          = Laporan::count();
+        $laporanBelumDiproses  = Laporan::where('status', 'Belum Diproses')->count();
+        $laporanDiproses       = Laporan::where('status', 'Diproses')->count();
+        $laporanSelesai        = Laporan::where('status', 'Selesai')->count();
+
+        // Progress (%) selesai
+        $progressPercentage = $totalLaporan > 0
+            ? round(($laporanSelesai / $totalLaporan) * 100, 1)
+            : 0;
+
+        // Laporan terbaru (5 terakhir)
+        $recentLaporan = Laporan::with(['user', 'kategori'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Statistik untuk hari ini
+        $today = today();
+
+        $todayLaporan = Laporan::whereDate('created_at', $today)->count();
+
+        $ditanganiHariIni = Laporan::whereIn('status', ['Diproses', 'Selesai'])
+            ->whereDate('updated_at', $today)
+            ->count();
+
+        $selesaiHariIni = Laporan::where('status', 'Selesai')
+            ->whereDate('updated_at', $today)
+            ->count();
+
+        // Kirim data ke view
+        return view('petugas.dashboard.index', compact(
+            'totalLaporan',
+            'laporanBelumDiproses',
+            'laporanDiproses',
+            'laporanSelesai',
+            'progressPercentage',
+            'recentLaporan',
+            'todayLaporan',
+            'ditanganiHariIni',
+            'selesaiHariIni'
+        ));
     }
+
 
     /**
      * MAHASISWA BERANDA
