@@ -121,28 +121,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Demo Accounts Info -->
-            <div class="mt-6 bg-purple-50 rounded-lg p-4 border border-purple-200">
-                <h4 class="text-sm font-semibold text-purple-800 mb-2 flex items-center">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Akses Demo:
-                </h4>
-                <div class="space-y-1 text-xs text-purple-700">
-                    <div class="flex justify-between">
-                        <span>Admin:</span>
-                        <code class="bg-purple-100 px-2 py-1 rounded">admin@unifix.ac.id</code>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Petugas:</span>
-                        <code class="bg-purple-100 px-2 py-1 rounded">petugas@unifix.ac.id</code>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Mahasiswa:</span>
-                        <code class="bg-purple-100 px-2 py-1 rounded">mahasiswa@unifix.ac.id</code>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Footer Links -->
