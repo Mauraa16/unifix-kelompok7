@@ -98,25 +98,7 @@
             <!-- Kolom Kanan: Aksi & Komentar -->
             <div class="space-y-6">
                 
-                <!-- Form Update Status -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-tasks text-purple-600 mr-2"></i> Tindakan
-                    </h3>
-                    <form action="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.updateStatus' : 'petugas.laporan.updateStatus', $laporan->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Update Status Laporan</label>
-                        <select name="status" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition">
-                            <option value="Belum Diproses" {{ $laporan->status == 'Belum Diproses' ? 'selected' : '' }}>⏳ Belum Diproses</option>
-                            <option value="Diproses" {{ $laporan->status == 'Diproses' ? 'selected' : '' }}>🔧 Sedang Diproses</option>
-                            <option value="Selesai" {{ $laporan->status == 'Selesai' ? 'selected' : '' }}>✅ Selesai</option>
-                        </select>
-                        <button type="submit" class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-200">
-                            Simpan Perubahan
-                        </button>
-                    </form>
-                </div>
+
 
                 <!-- Komentar / Tanggapan -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-[500px]">

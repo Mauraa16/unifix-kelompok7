@@ -97,9 +97,9 @@
                     <div class="p-4 hover:bg-gray-50 transition duration-150">
                         <div class="flex items-start justify-between">
                             <div class="flex items-start space-x-4">
-                                <div class="mt-1 p-2 rounded-lg 
-                                    {{ $laporan->status == 'Sudah Diproses' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' }}">
-                                    <i class="fas {{ $laporan->status == 'Sudah Diproses' ? 'fa-check' : 'fa-exclamation-triangle' }}"></i>
+                                <div class="mt-1 p-2 rounded-lg
+                                    {{ $laporan->status == 'Selesai' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' }}">
+                                    <i class="fas {{ $laporan->status == 'Selesai' ? 'fa-check' : 'fa-exclamation-triangle' }}"></i>
                                 </div>
                                 <div>
                                     <h3 class="text-sm font-bold text-gray-900">{{ $laporan->judul ?? 'Judul Tidak Ada' }}</h3>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="flex flex-col items-end space-y-2">
                                 <span class="px-3 py-1 text-xs font-bold rounded-full
-                                    {{ $laporan->status == 'Sudah Diproses' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                                    {{ $laporan->status == 'Selesai' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                                     {{ $laporan->status }}
                                 </span>
                                 {{-- PERBAIKAN: Link chevron diarahkan ke route 'admin.laporan.show' --}}

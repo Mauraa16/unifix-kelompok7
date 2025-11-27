@@ -67,9 +67,14 @@
                 <div id="informasi-akun" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold text-gray-800">Informasi Akun</h2>
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
-                            <i class="fas fa-check-circle mr-1"></i>Aktif
-                        </span>
+                        <div class="flex items-center space-x-3">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                                <i class="fas fa-check-circle mr-1"></i>Aktif
+                            </span>
+                            <button type="button" id="editBtn" class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition">
+                                <i class="fas fa-edit mr-2"></i>Edit Profil
+                            </button>
+                        </div>
                     </div>
 
                     @if(session('success'))
@@ -139,33 +144,47 @@
                             </div>
                         </div>
 
+                        <!-- Action Buttons (hidden by default) -->
+                        <div id="actionButtons" class="hidden flex items-center space-x-3 mt-6 pt-6 border-t border-gray-200">
+                            <button type="submit" class="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
+                                <i class="fas fa-save mr-2"></i>Simpan
+                            </button>
+                            <button type="button" id="cancelBtn" class="px-6 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition">
+                                <i class="fas fa-times mr-2"></i>Batalkan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<!-- JavaScript untuk smooth scroll dan active menu -->
+<!-- JavaScript untuk smooth scroll, active menu, dan edit profil -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scroll untuk menu
     const menuLinks = document.querySelectorAll('a[href^="#"]');
-    
+
     menuLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-            
+
             if (targetElement) {
                 targetElement.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
-                
+
                 // Update active menu
                 menuLinks.forEach(link => {
                     link.classList.remove('text-purple-600', 'bg-purple-50', 'border-purple-100');
                     link.classList.add('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
                 });
-                
+
                 this.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
                 this.classList.add('text-purple-600', 'bg-purple-50', 'border-purple-100');
             }
@@ -185,6 +204,34 @@ document.addEventListener('DOMContentLoaded', function() {
             activeLink.classList.add('text-purple-600', 'bg-purple-50', 'border-purple-100');
         }
     }
+
+    // Edit Profil Functionality
+    const editBtn = document.getElementById('editBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const actionButtons = document.getElementById('actionButtons');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+
+    let originalName = nameInput.value;
+    let originalEmail = emailInput.value;
+
+    // Enable edit mode
+    editBtn.addEventListener('click', function() {
+        nameInput.disabled = false;
+        emailInput.disabled = false;
+        actionButtons.classList.remove('hidden');
+        editBtn.style.display = 'none';
+    });
+
+    // Cancel edit
+    cancelBtn.addEventListener('click', function() {
+        nameInput.value = originalName;
+        emailInput.value = originalEmail;
+        nameInput.disabled = true;
+        emailInput.disabled = true;
+        actionButtons.classList.add('hidden');
+        editBtn.style.display = 'inline-block';
+    });
 });
 </script>
 @endsection

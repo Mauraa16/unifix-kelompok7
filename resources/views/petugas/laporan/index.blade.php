@@ -37,6 +37,7 @@
         <table class="min-w-full table-auto">
             <thead class="bg-gray-50">
                 <tr>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Foto</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Judul</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Pelapor</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
@@ -48,6 +49,13 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($laporan as $item)
                 <tr>
+                    <td class="px-4 py-2 whitespace-nowrap">
+                        @if($item->foto)
+                            <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Laporan" class="w-12 h-12 object-cover rounded">
+                        @else
+                            <span class="text-gray-400 text-xs">Tidak ada foto</span>
+                        @endif
+                    </td>
                     <td class="px-4 py-2 text-sm text-gray-700">{{ $item->judul }}</td>
                     <td class="px-4 py-2 text-sm text-gray-700">{{ $item->user->name }}</td>
 
@@ -77,7 +85,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-4 text-center text-gray-500">
+                    <td colspan="6" class="px-4 py-4 text-center text-gray-500">
                         Tidak ada laporan.
                     </td>
                 </tr>

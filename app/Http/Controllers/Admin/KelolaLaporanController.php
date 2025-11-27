@@ -51,70 +51,9 @@ class KelolaLaporanController extends Controller
         return view('admin.laporan.show', compact('laporan'));
     }
 
-    /**
-     * ==========================================================
-     * FUNGSI BARU: edit (Yang menyebabkan error)
-     * Menampilkan form untuk admin mengedit konten laporan.
-     * ==========================================================
-     */
-    public function edit(Laporan $laporan)
-    {
-        $kategori = KategoriLaporan::all();
-        return view('admin.laporan.edit', compact('laporan', 'kategori'));
-    }
 
-    /**
-     * ==========================================================
-     * FUNGSI BARU: update (Untuk menyimpan form edit)
-     * ==========================================================
-     */
-    public function update(Request $request, Laporan $laporan)
-    {
-        // Validasi (mirip LaporanController mahasiswa)
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'kategori_id' => 'required|exists:kategori_laporan,id',
-            'lokasi' => 'required|string|max:255',
-            'deskripsi' => 'required|string|min:10',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // foto opsional
-        ]);
 
-        $fotoPath = $laporan->foto;
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            if ($laporan->foto) {
-                Storage::disk('public')->delete($laporan->foto);
-            }
-            // Upload foto baru
-            $fotoPath = $request->file('foto')->store('laporan', 'public');
-        }
 
-        $laporan->update([
-            'judul' => $request->judul,
-            'kategori_id' => $request->kategori_id,
-            'lokasi' => $request->lokasi,
-            'deskripsi' => $request->deskripsi,
-            'foto' => $fotoPath,
-        ]);
-
-        // Redirect kembali ke halaman show (detail)
-        return redirect()->route('admin.laporan.show', $laporan->id)
-                         ->with('success', 'Detail laporan berhasil diperbarui.');
-    }
-
-    /**
-     * Update status laporan (Belum Diproses, Diproses, Selesai).
-     */
-    public function updateStatus(Request $request, Laporan $laporan)
-    {
-        $request->validate([
-            'status' => 'required|in:Belum Diproses,Diproses,Selesai',
-        ]);
-
-        $laporan->update(['status' => $request->status]);
-
-        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui.');
-    }
 
     /**
      * Simpan komentar baru dari admin/petugas.
@@ -134,22 +73,5 @@ class KelolaLaporanController extends Controller
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
-    /**
-     * Hapus laporan (HANYA ADMIN).
-     */
-    public function destroy(Laporan $laporan)
-    {
-        // Otorisasi sederhana, hanya admin
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->back()->with('error', 'Hanya admin yang bisa menghapus laporan.');
-        }
 
-        if ($laporan->foto) {
-            Storage::disk('public')->delete($laporan->foto);
-        }
-
-        $laporan->delete();
-
-        return redirect()->route('admin.laporan.index')->with('success', 'Laporan berhasil dihapus.');
-    }
 }

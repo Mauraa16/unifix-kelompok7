@@ -58,7 +58,7 @@ class HomeController extends Controller
         if (class_exists(Laporan::class)) {
             $totalLaporan = Laporan::count();
             $laporanPending = Laporan::where('status', 'Belum Diproses')->count();
-            $laporanSelesai = Laporan::where('status', 'Sudah Diproses')->count();
+            $laporanSelesai = Laporan::where('status', 'Selesai')->count();
             $recentLaporan = Laporan::with('user')->latest()->take(5)->get();
         } else {
             $totalLaporan = 0;

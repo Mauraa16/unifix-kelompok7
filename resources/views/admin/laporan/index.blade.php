@@ -39,6 +39,7 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelapor</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul Laporan</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
@@ -51,6 +52,13 @@
                         @forelse ($laporan as $l)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($l->foto)
+                                        <img src="{{ asset('storage/' . $l->foto) }}" alt="Foto Laporan" class="w-12 h-12 object-cover rounded">
+                                    @else
+                                        <span class="text-gray-400 text-xs">Tidak ada foto</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ $l->user->name }}</div>
                                     <div class="text-xs text-gray-500">{{ $l->user->email }}</div>
                                 </td>
@@ -60,9 +68,14 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $l->kategori->nama_kategori }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 text-xs font-bold rounded-full
-                                        {{ $l->status == 'Selesai' ? 'bg-green-100 text-green-700' : 
-                                          ($l->status == 'Diproses' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700') }}">
+                                    @php
+                                        $warna = [
+                                            'Belum Diproses' => 'bg-yellow-100 text-yellow-800',
+                                            'Diproses'      => 'bg-blue-100 text-blue-800',
+                                            'Selesai'       => 'bg-green-100 text-green-800',
+                                        ];
+                                    @endphp
+                                    <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $warna[$l->status] ?? '' }}">
                                         {{ $l->status }}
                                     </span>
                                 </td>
@@ -72,38 +85,19 @@
                                 {{-- == BAGIAN AKSI YANG DIPERBAIKI == --}}
                                 {{-- =============================================== --}}
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                    
+
                                     <!-- Tombol Lihat (Semua Admin/Petugas) -->
-                                    <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.show' : 'petugas.laporan.show', $l->id) }}" 
-                                       class="text-blue-600 hover:text-blue-900" 
+                                    <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.show' : 'petugas.laporan.show', $l->id) }}"
+                                       class="text-blue-600 hover:text-blue-900"
                                        title="Lihat & Tanggapi">
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <!-- Tombol Aksi (Hanya Admin) -->
-                                    @if(Auth::user()->role == 'admin')
-                                        
-                                        <!-- PERBAIKAN: Tombol Edit Ditambahkan -->
-                                        <a href="{{ route('admin.laporan.edit', $l->id) }}" 
-                                           class="text-indigo-600 hover:text-indigo-900 ml-2" 
-                                           title="Edit Laporan">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-
-                                        <!-- Tombol Hapus -->
-                                        <form action="{{ route('admin.laporan.destroy', $l->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900 ml-2" title="Hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endif
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                                <td colspan="7" class="px-6 py-10 text-center text-gray-500">
                                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                                         <i class="fas fa-inbox text-gray-400 text-2xl"></i>
                                     </div>

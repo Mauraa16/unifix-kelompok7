@@ -110,7 +110,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Fitur Kelola Laporan (Lengkap)
     Route::get('laporan', [KelolaLaporanController::class, 'index'])->name('admin.laporan.index');
     Route::get('laporan/{laporan}', [KelolaLaporanController::class, 'show'])->name('admin.laporan.show');
-    Route::put('laporan/{laporan}/status', [KelolaLaporanController::class, 'updateStatus'])->name('admin.laporan.updateStatus');
     Route::post('laporan/{laporan}/komentar', [KelolaLaporanController::class, 'storeKomentar'])->name('admin.laporan.storeKomentar');
     Route::delete('laporan/{laporan}', [KelolaLaporanController::class, 'destroy'])->name('admin.laporan.destroy');
 
