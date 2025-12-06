@@ -33,7 +33,6 @@ class HomeController extends Controller
             case 'petugas':
                 return redirect()->route('petugas.dashboard.index');
             case 'mahasiswa':
-                // Redirect ke route 'mahasiswa.beranda' (lihat fungsi di bawah)
                 return redirect()->route('mahasiswa.beranda'); 
             default:
                 Auth::logout();
@@ -42,19 +41,16 @@ class HomeController extends Controller
     }
 
     // ====================================================================
-    // FUNGSI KHUSUS DASHBOARD (Dipanggil oleh routes/web.php)
+    // FUNGSI KHUSUS DASHBOARD
     // ====================================================================
 
     /**
      * ADMIN DASHBOARD
-     * Mengambil data statistik dan menampilkan view admin.
      */
     public function adminDashboard()
     {
-        // Ambil data untuk statistik dashboard
         $totalUsers = User::count();
         
-        // Cek apakah model Laporan ada biar tidak error
         if (class_exists(Laporan::class)) {
             $totalLaporan = Laporan::count();
             $laporanPending = Laporan::where('status', 'Belum Diproses')->count();
@@ -69,7 +65,6 @@ class HomeController extends Controller
         
         $recentUsers = User::latest()->take(5)->get();
 
-        // View: resources/views/admin/dashboard.blade.php
         return view('admin.dashboard', compact(
             'totalUsers', 
             'totalLaporan', 
@@ -81,41 +76,33 @@ class HomeController extends Controller
     }
 
     /**
-     * Dashboard Petugas
+     * PETUGAS DASHBOARD
      */
     public function petugasDashboard()
     {
-        // Statistik utama
         $totalLaporan          = Laporan::count();
         $laporanBelumDiproses  = Laporan::where('status', 'Belum Diproses')->count();
         $laporanDiproses       = Laporan::where('status', 'Diproses')->count();
         $laporanSelesai        = Laporan::where('status', 'Selesai')->count();
 
-        // Progress (%) selesai
         $progressPercentage = $totalLaporan > 0
             ? round(($laporanSelesai / $totalLaporan) * 100, 1)
             : 0;
 
-        // Laporan terbaru (5 terakhir)
         $recentLaporan = Laporan::with(['user', 'kategori'])
             ->latest()
             ->take(5)
             ->get();
 
-        // Statistik untuk hari ini
         $today = today();
-
         $todayLaporan = Laporan::whereDate('created_at', $today)->count();
-
         $ditanganiHariIni = Laporan::whereIn('status', ['Diproses', 'Selesai'])
             ->whereDate('updated_at', $today)
             ->count();
-
         $selesaiHariIni = Laporan::where('status', 'Selesai')
             ->whereDate('updated_at', $today)
             ->count();
 
-        // Kirim data ke view
         return view('petugas.dashboard.index', compact(
             'totalLaporan',
             'laporanBelumDiproses',
@@ -129,13 +116,32 @@ class HomeController extends Controller
         ));
     }
 
-
     /**
-     * MAHASISWA BERANDA
+     * MAHASISWA BERANDA (UPDATE)
+     * Menampilkan statistik dan riwayat laporan milik mahasiswa yang login.
      */
     public function mahasiswaBeranda()
     {
-        // View: resources/views/home.blade.php (Sesuai screenshot kamu)
-        return view('home'); 
+        $userId = Auth::id();
+
+        // Ambil statistik laporan saya
+        $totalLaporan   = Laporan::where('user_id', $userId)->count();
+        $laporanPending = Laporan::where('user_id', $userId)->where('status', 'Belum Diproses')->count();
+        $laporanProses  = Laporan::where('user_id', $userId)->where('status', 'Diproses')->count();
+        $laporanSelesai = Laporan::where('user_id', $userId)->where('status', 'Selesai')->count();
+
+        // Ambil 3 laporan terakhir untuk ditampilkan di widget riwayat
+        $riwayatTerbaru = Laporan::where('user_id', $userId)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('home', compact(
+            'totalLaporan', 
+            'laporanPending', 
+            'laporanProses', 
+            'laporanSelesai',
+            'riwayatTerbaru'
+        )); 
     }
 }

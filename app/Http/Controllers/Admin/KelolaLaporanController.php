@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use App\Models\Komentar;
-use App\Models\KategoriLaporan; // <-- DITAMBAHKAN: Untuk mengambil data kategori
+use App\Models\KategoriLaporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -19,9 +19,6 @@ class KelolaLaporanController extends Controller
     {
         // Semua role (admin/petugas) bisa mengakses halaman ini
         $this->middleware(['auth', 'role:admin,petugas']);
-        
-        // PERBAIKAN: Tapi HANYA admin yang bisa edit, update, dan hapus
-        $this->middleware(['role:admin'])->only(['edit', 'update', 'destroy']);
     }
 
     /**
@@ -51,10 +48,6 @@ class KelolaLaporanController extends Controller
         return view('admin.laporan.show', compact('laporan'));
     }
 
-
-
-
-
     /**
      * Simpan komentar baru dari admin/petugas.
      */
@@ -72,6 +65,4 @@ class KelolaLaporanController extends Controller
 
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
     }
-
-
 }

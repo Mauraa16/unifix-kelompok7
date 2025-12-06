@@ -2,346 +2,216 @@
 
 @section('content')
 
-
 <style>
-body {
-    font-family: 'Poppins', sans-serif;
-}
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
-/* HERO SECTION */
-.hero-section {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    padding: 6rem 0;
-    position: relative;
-}
-.hero-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-}
-.hero-content {
-    flex: 1 1 450px;
-}
-.hero-title {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-.hero-subtitle {
-    font-size: clamp(1rem, 1.5vw, 1.25rem);
-    opacity: 0.9;
-    margin-bottom: 2rem;
-}
-.hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-.hero-actions .btn {
-    padding: 12px 28px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: 0.3s ease;
-    text-decoration: none;
-}
-.btn-primary {
-    background: #fff;
-    color: #667eea;
-    border: 2px solid #fff;
-}
-.btn-primary:hover {
-    background: rgba(255,255,255,0.9);
-    transform: translateY(-3px);
-}
-.btn-outline-primary {
-    background: transparent;
-    color: #fff;
-    border: 2px solid #fff;
-}
-.btn-outline-primary:hover {
-    background: #fff;
-    color: #667eea;
-    transform: translateY(-3px);
-}
-.hero-image {
-    flex: 1 1 400px;
-    text-align: center;
-}
-.hero-illustration {
-    width: 100%;
-    max-width: 480px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-    transition: transform 0.4s ease;
-}
-.hero-illustration:hover {
-    transform: scale(1.03);
-}
-
-/* STATS SECTION */
-.stats-section {
-    padding: 60px 0;
-    background: #f8fafc;
-}
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-}
-.stat-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: all 0.3s ease;
-}
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-}
-
-/* FEATURES SECTION */
-.features-section {
-    background: #fff;
-    padding: 80px 0;
-}
-.section-header {
-    text-align: center;
-    margin-bottom: 60px;
-}
-.section-title {
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 700;
-}
-.section-subtitle {
-    color: #6b7280;
-    max-width: 600px;
-    margin: 0 auto;
-}
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-.feature-card {
-    background: #f9fafb;
-    border-radius: 16px;
-    padding: 40px 25px;
-    text-align: center;
-    transition: 0.3s ease;
-    border: 1px solid #e5e7eb;
-}
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-.feature-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin: 0 auto 20px;
-}
-
-/* QUICK ACTIONS SECTION */
-.quick-actions-section {
-    background: #f8fafc;
-    padding: 80px 0;
-}
-.quick-actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
-}
-.quick-action-card {
-    background: white;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    padding: 25px;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-.quick-action-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-.quick-action-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-}
-.quick-action-content h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-.quick-action-arrow {
-    margin-left: auto;
-    color: #667eea;
-    font-size: 20px;
-    transition: transform 0.3s ease;
-}
-.quick-action-card:hover .quick-action-arrow {
-    transform: translateX(6px);
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .hero-container {
-        flex-direction: column;
-        text-align: center;
+    /* Animasi halus untuk hero image */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
     }
-    .hero-actions {
-        justify-content: center;
+    .hero-animate {
+        animation: float 4s ease-in-out infinite;
     }
-}
 </style>
 
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <div class="container hero-container">
-        <div class="hero-content">
-            <h1 class="hero-title">Selamat Datang di UNIFIX</h1>
-            <p class="hero-subtitle">Sistem Pelaporan Kerusakan Fasilitas Universitas yang cepat, aman, dan efisien</p>
-            <div class="hero-actions">
-                @if(auth()->user()->role == 'mahasiswa')
-                    <a href="{{ route('laporan.index') }}" class="btn btn-primary">
-                        <i class="fas fa-clipboard-list"></i> Kelola Laporan
-                    </a>
-                    <a href="{{ route('laporan.create') }}" class="btn btn-outline-primary">
-                        <i class="fas fa-plus"></i> Buat Laporan Baru
-                    </a>
-                @endif
-            </div>
+<div class="bg-gray-50 min-h-screen pb-12">
+    
+    {{-- HERO SECTION --}}
+    <div class="relative bg-gradient-to-r from-purple-700 to-indigo-800 text-white overflow-hidden rounded-b-[40px] shadow-lg mb-10">
+        {{-- Pattern Overlay (Hiasan) --}}
+        <div class="absolute inset-0 opacity-10">
+            <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+            </svg>
         </div>
-        <div class="hero-image">
-            <img src="https://img.freepik.com/free-vector/maintenance-concept-illustration_114360-392.jpg"
-                 alt="UNIFIX Illustration" class="hero-illustration">
-        </div>
-    </div>
-</section>
 
-<!-- STATS SECTION -->
-@if(auth()->user()->role == 'mahasiswa')
-<section class="stats-section">
-    <div class="container stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
-            <div>
-                <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->count() }}</h3>
-                <p class="stat-label">Total Laporan</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-clock"></i></div>
-            <div>
-                <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->where('status', 'Belum Diproses')->count() }}</h3>
-                <p class="stat-label">Belum Diproses</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-            <div>
-                <h3 class="stat-number">{{ \App\Models\Laporan::where('user_id', auth()->id())->where('status', 'Sudah Diproses')->count() }}</h3>
-                <p class="stat-label">Sudah Diproses</p>
-            </div>
-        </div>
-    </div>
-</section>
-@endif
-
-<!-- FEATURES SECTION -->
-<section class="features-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Fitur Unggulan</h2>
-            <p class="section-subtitle">Pelaporan kerusakan fasilitas universitas yang mudah dan cepat</p>
-        </div>
-        <div class="features-grid">
-            @foreach([
-                ['fa-camera', 'Foto & Kamera', 'Ambil foto langsung atau upload gambar untuk laporan.'],
-                ['fa-tags', 'Kategori Lengkap', 'Pilih kategori sesuai jenis kerusakan.'],
-                ['fa-map-marker-alt', 'Lokasi Spesifik', 'Tentukan lokasi kejadian dengan akurat.'],
-                ['fa-comments', 'Sistem Komentar', 'Diskusi langsung dengan admin.'],
-                ['fa-mobile-alt', 'Responsive Design', 'Akses mudah di semua perangkat.'],
-                ['fa-shield-alt', 'Keamanan Data', 'Data Anda terlindungi sepenuhnya.']
-            ] as $index => $feature)
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas {{ $feature[0] }}"></i></div>
-                <h3>{{ $feature[1] }}</h3>
-                <p>{{ $feature[2] }}</p>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-<!-- QUICK ACTIONS SECTION -->
-@if(auth()->user()->role == 'mahasiswa')
-<section class="quick-actions-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Aksi Cepat</h2>
-            <p class="section-subtitle">Laporan terbaru dan aksi yang sering digunakan</p>
-        </div>
-        <div class="quick-actions-grid">
-            <a href="{{ route('laporan.create') }}" class="quick-action-card">
-                <div class="quick-action-icon"><i class="fas fa-plus-circle"></i></div>
-                <div class="quick-action-content">
-                    <h3>Buat Laporan Baru</h3>
-                    <p>Laporkan kerusakan fasilitas</p>
+        <div class="container mx-auto px-6 pt-12 pb-20 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                {{-- Text Content --}}
+                <div class="md:w-1/2 text-center md:text-left">
+                    <span class="inline-block py-1 px-3 rounded-full bg-purple-600 bg-opacity-50 border border-purple-400 text-xs font-semibold mb-4 tracking-wide">
+                        SISTEM PENGADUAN FASILITAS
+                    </span>
+                    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+                        Ada Fasilitas Rusak?<br>
+                        <span class="text-yellow-300">Lapor Sekarang!</span>
+                    </h1>
+                    <p class="text-lg text-purple-100 mb-8 max-w-lg mx-auto md:mx-0">
+                        Bantu kami menjaga kenyamanan kampus. Laporkan kerusakan fasilitas dengan mudah, cepat, dan transparan melalui UNIFIX.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="{{ route('laporan.create') }}" 
+                           class="px-8 py-3 bg-white text-purple-700 font-bold rounded-full shadow-lg hover:bg-gray-100 hover:shadow-xl transition transform hover:-translate-y-1">
+                            <i class="fas fa-plus-circle mr-2"></i> Buat Laporan
+                        </a>
+                        <a href="{{ route('laporan.index') }}" 
+                           class="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-purple-700 transition">
+                            <i class="fas fa-list mr-2"></i> Laporan Saya
+                        </a>
+                    </div>
                 </div>
-                <div class="quick-action-arrow"><i class="fas fa-arrow-right"></i></div>
-            </a>
-            <a href="{{ route('laporan.index') }}" class="quick-action-card">
-                <div class="quick-action-icon"><i class="fas fa-list"></i></div>
-                <div class="quick-action-content">
-                    <h3>Lihat Semua Laporan</h3>
-                    <p>Kelola laporan Anda</p>
+
+                {{-- Illustration / Icon --}}
+                <div class="md:w-1/2 flex justify-center hero-animate">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-purple-500 blur-3xl opacity-30 rounded-full"></div>
+                        <img src="https://img.freepik.com/free-vector/maintenance-concept-illustration_114360-391.jpg?w=740&t=st=1685000000~exp=1685000600~hmac=xyz" 
+                             alt="Maintenance Illustration" 
+                             class="relative z-10 w-full max-w-sm drop-shadow-2xl rounded-2xl mix-blend-multiply">
+                    </div>
                 </div>
-                <div class="quick-action-arrow"><i class="fas fa-arrow-right"></i></div>
-            </a>
+            </div>
         </div>
     </div>
-</section>
-@endif
 
+    <div class="container mx-auto px-4 -mt-16 relative z-20">
+        
+        {{-- STATISTIK CARDS --}}
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+            <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-purple-500 hover:shadow-lg transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium uppercase">Total Laporan</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ $totalLaporan }}</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                </div>
+            </div>
 
+            <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-yellow-400 hover:shadow-lg transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium uppercase">Belum Diproses</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ $laporanPending }}</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-blue-500 hover:shadow-lg transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium uppercase">Sedang Diproses</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ $laporanProses }}</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-green-500 hover:shadow-lg transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium uppercase">Selesai</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ $laporanSelesai }}</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- GRID CONTENT: ALUR & RIWAYAT TERBARU --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {{-- KOLOM KIRI: ALUR PELAPORAN --}}
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-info-circle text-purple-600 mr-3"></i> Alur Pelaporan
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center group">
+                            <div class="w-16 h-16 mx-auto bg-purple-50 text-purple-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                                1
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">Ambil Foto</h3>
+                            <p class="text-gray-500 text-sm">Foto bagian fasilitas yang rusak sebagai bukti laporan.</p>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="w-16 h-16 mx-auto bg-purple-50 text-purple-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                                2
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">Isi Formulir</h3>
+                            <p class="text-gray-500 text-sm">Lengkapi data lokasi dan deskripsi kerusakan dengan jelas.</p>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="w-16 h-16 mx-auto bg-purple-50 text-purple-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                                3
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">Pantau Status</h3>
+                            <p class="text-gray-500 text-sm">Cek status laporan Anda secara berkala di dashboard.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center bg-gray-50 p-4 rounded-xl border border-dashed border-gray-300">
+                        <p class="text-gray-600 text-sm">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 
+                            <strong>Tips:</strong> Berikan deskripsi sedetail mungkin agar petugas mudah menemukan lokasi kerusakan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- KOLOM KANAN: AKTIVITAS TERBARU --}}
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-bold text-gray-800">Riwayat Terbaru</h2>
+                        <a href="{{ route('laporan.index') }}" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Lihat Semua</a>
+                    </div>
+
+                    @forelse($riwayatTerbaru as $item)
+                        <div class="flex items-start space-x-4 mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+                            {{-- Icon Status --}}
+                            <div class="flex-shrink-0 mt-1">
+                                @if($item->status == 'Selesai')
+                                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div>
+                                @elseif($item->status == 'Diproses')
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fas fa-cog"></i></div>
+                                @else
+                                    <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs"><i class="fas fa-clock"></i></div>
+                                @endif
+                            </div>
+                            
+                            {{-- Content --}}
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-gray-800 truncate">{{ $item->judul }}</p>
+                                <p class="text-xs text-gray-500">{{ $item->created_at->diffForHumans() }}</p>
+                                <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide
+                                    {{ $item->status == 'Selesai' ? 'bg-green-50 text-green-700' : 
+                                      ($item->status == 'Diproses' ? 'bg-blue-50 text-blue-700' : 'bg-yellow-50 text-yellow-700') }}">
+                                    {{ $item->status }}
+                                </span>
+                            </div>
+                            
+                            {{-- Arrow --}}
+                            <a href="{{ route('laporan.show', $item->id) }}" class="text-gray-300 hover:text-purple-600 transition">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    @empty
+                        <div class="text-center py-8">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
+                                <i class="fas fa-folder-open text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 text-sm">Belum ada riwayat laporan.</p>
+                            <a href="{{ route('laporan.create') }}" class="text-purple-600 text-sm font-medium hover:underline mt-2 inline-block">Buat sekarang</a>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection

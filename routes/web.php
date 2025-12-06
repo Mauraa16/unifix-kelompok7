@@ -3,15 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// --- IMPORT SEMUA CONTROLLER ---
 use App\Http\Controllers\HomeController; 
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\LaporanController; // Untuk Mahasiswa
-use App\Http\Controllers\Admin\MahasiswaController; // Untuk Admin
-use App\Http\Controllers\Admin\PetugasController; // Untuk Admin
-use App\Http\Controllers\Admin\KelolaLaporanController; // Untuk Admin & Petugas
-use App\Http\Controllers\Petugas\ProfilPetugasController; //untuk petugas
-use App\Http\Controllers\Petugas\PetugasLaporanController; //untuk petugas
+use App\Http\Controllers\LaporanController; 
+use App\Http\Controllers\Admin\MahasiswaController; 
+use App\Http\Controllers\Admin\PetugasController; 
+use App\Http\Controllers\Admin\KelolaLaporanController; 
+use App\Http\Controllers\Petugas\ProfilPetugasController; 
+use App\Http\Controllers\Petugas\PetugasLaporanController; 
+use App\Http\Controllers\Admin\ProfilAdminController; 
+use App\Http\Controllers\ProfilMahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,11 +42,15 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(functi
     
     // CRUD Laporan (Laporan saya sendiri)
     Route::resource('laporan', LaporanController::class);
+
+    Route::get('/profil', [ProfilMahasiswaController::class, 'show'])->name('mahasiswa.profil');
+    Route::put('/profil', [ProfilMahasiswaController::class, 'update'])->name('mahasiswa.profil.update');
 });
 
 
-
-
+// ====================================================================
+// RUTE KHUSUS PETUGAS (role:petugas)
+// ====================================================================
 Route::middleware(['auth', 'role:petugas'])
     ->prefix('petugas')
     ->name('petugas.')
@@ -91,8 +96,6 @@ Route::middleware(['auth', 'role:petugas'])
 });
 
 
-
-
 // ====================================================================
 // RUTE KHUSUS ADMIN (role:admin)
 // ====================================================================
@@ -107,15 +110,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // CRUD Kelola Akun Petugas
     Route::resource('petugas', PetugasController::class);
 
-    // Fitur Kelola Laporan (Lengkap)
+    // Fitur Kelola Laporan (HANYA VIEW & KOMENTAR)
     Route::get('laporan', [KelolaLaporanController::class, 'index'])->name('admin.laporan.index');
     Route::get('laporan/{laporan}', [KelolaLaporanController::class, 'show'])->name('admin.laporan.show');
     Route::post('laporan/{laporan}/komentar', [KelolaLaporanController::class, 'storeKomentar'])->name('admin.laporan.storeKomentar');
-    Route::delete('laporan/{laporan}', [KelolaLaporanController::class, 'destroy'])->name('admin.laporan.destroy');
+    
+    Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
+    Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
+    // Catatan: Route edit, update, destroy untuk laporan sudah dihapus agar admin tidak bisa mengubah data.
 
-    // --- PERBAIKAN: 2 RUTE YANG HILANG DITAMBAHKAN DI SINI ---
-    Route::get('laporan/{laporan}/edit', [KelolaLaporanController::class, 'edit'])->name('admin.laporan.edit');
-    Route::put('laporan/{laporan}', [KelolaLaporanController::class, 'update'])->name('admin.laporan.update');
 });
 
 
