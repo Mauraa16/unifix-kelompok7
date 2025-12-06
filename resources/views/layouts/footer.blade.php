@@ -234,7 +234,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-gray-800">Email</p>
-                        <p class="text-sm text-gray-600">support@unifix.ac.id</p>
+                        <p class="text-sm text-gray-600">unifixa00@gmail.com</p>
                     </div>
                 </a>
             </div>

@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'UNIFIX') }}</title>
+    {{-- Judul Dinamis (Default: UNIFIX) --}}
+    <title>@yield('title', config('app.name', 'UNIFIX'))</title>
 
+    {{-- Favicon (Logo di Tab Browser) --}}
     <link rel="icon" type="image/png" href="{{ asset('images/icon.png') }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -34,7 +37,6 @@
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
     {{-- HEADER --}}
-    {{-- Class fixed dihapus disini karena sudah ada di dalam file include (header.blade.php) --}}
     <header class="z-50">
         @auth
             @if(Auth::user()->role == 'admin')
@@ -50,7 +52,6 @@
     </header>
 
     {{-- KONTEN UTAMA --}}
-    {{-- pt-[70px] digunakan agar padding persis sama dengan tinggi header (70px) --}}
     <main class="flex-grow pt-[70px] pb-10">
         @yield('content')
     </main>

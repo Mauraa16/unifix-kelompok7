@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Dashboard Admin - UNIFIX')
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto mb-8">
