@@ -13,6 +13,7 @@ use App\Http\Controllers\Petugas\ProfilPetugasController;
 use App\Http\Controllers\Petugas\PetugasLaporanController; 
 use App\Http\Controllers\Admin\ProfilAdminController; 
 use App\Http\Controllers\ProfilMahasiswaController;
+use App\Http\Controllers\Auth\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     // Profil Admin
     Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
     Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
+
+    // Route Google Login
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
 // Route Publik

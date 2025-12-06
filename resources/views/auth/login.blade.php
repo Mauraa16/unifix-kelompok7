@@ -6,21 +6,17 @@
 
 <div class="relative flex min-h-screen items-center justify-center overflow-hidden">
 
-    <!-- Background -->
     <div class="absolute inset-0 bg-cover bg-center"
          style="background-image: url('{{ asset('images/background_login.jpg') }}');">
     </div>
 
-    <!-- Overlay Ungu -->
     <div class="absolute inset-0 bg-gradient-to-r from-[#667eea]/50 to-[#764ba2]/50"></div>
 
-    <!-- Card -->
     <main class="relative z-10 w-full max-w-md px-4">
         <div class="bg-black/30 backdrop-blur-lg border border-white/20 rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.40)]">
 
             <div class="p-8 space-y-8">
 
-                <!-- Header -->
                 <div class="text-center">
                     <span class="flex items-center gap-5 justify-center mt-1">
                             <img src="{{ asset('images/logo.png') }}" 
@@ -33,7 +29,6 @@
                     <p class="text-gray-300 mt-2">Masuk untuk melanjutkan aktivitas Anda</p>
                 </div>
 
-                <!-- Tab Login / Register -->
                 <div class="flex items-center justify-between bg-white/10 p-1 rounded-xl backdrop-blur-md">
                     <button onclick="window.location='{{ route('login') }}'"
                             class="flex-1 text-center py-2 rounded-lg text-white font-medium bg-white/20 shadow">
@@ -46,11 +41,9 @@
                     </button>
                 </div>
 
-                <!-- Form -->
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
 
-                    <!-- Email -->
                     <div>
                         <label class="text-gray-200 text-sm font-medium">Alamat Email</label>
 
@@ -67,7 +60,6 @@
 
                     </div>
 
-                    <!-- Password -->
                     <div>
                         <div class="flex justify-between">
                             <label class="text-gray-200 text-sm font-medium">Password</label>
@@ -88,7 +80,6 @@
                             </button>
                         </div>
 
-                        <!-- Error Login -->
                         @error('email')
                         <p class="mt-2 text-red-300 text-sm flex items-center gap-1">
                             <span class="material-symbols-outlined text-sm">error</span>
@@ -97,18 +88,21 @@
                         @enderror
                     </div>
 
-                    <!-- Button -->
                     <button type="submit" class="btn-unifix">Login</button>
                 </form>
 
-                <!-- Divider -->
                 <div class="flex items-center">
                     <div class="flex-1 h-px bg-white/20"></div>
-                    <span class="px-3 text-gray-300 text-sm">Atau</span>
+                    <span class="px-3 text-gray-300 text-xs uppercase tracking-wider">Atau lanjutkan dengan</span>
                     <div class="flex-1 h-px bg-white/20"></div>
                 </div>
 
-                <!-- Register -->
+                <a href="{{ route('auth.google') }}" 
+                   class="flex items-center justify-center w-full bg-white text-gray-700 font-medium py-2.5 rounded-xl hover:bg-gray-100 transition shadow-sm gap-3 group">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                    <span>Google</span>
+                </a>
+
                 <p class="text-center text-gray-300 text-sm">
                     Belum punya akun?
                     <a href="{{ route('register') }}" class="text-white font-medium hover:underline">Daftar di sini</a>
