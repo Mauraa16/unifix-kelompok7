@@ -3,11 +3,11 @@
 @section('content')
 {{-- 
     PERBAIKAN: 
-    Saya menghapus 'pt-28' di sini. 
-    Jarak atas sekarang dikendalikan sepenuhnya oleh layouts/app.blade.php (pt-24).
-    Ini membuat tampilan konsisten dan tidak terlalu turun.
+    Menggunakan 'py-8' saja. 
+    Jarak dari header sudah diurus otomatis oleh layout utama (app.blade.php) yang punya 'pt-20'.
+    Jadi tidak perlu lagi menambahkan pt-28 di sini.
 --}}
-<div class="container mx-auto px-4 pb-12">
+<div class="container mx-auto px-4 py-8">
     <div class="max-w-5xl mx-auto">
         
         <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
@@ -123,7 +123,7 @@
                                     </div>
                                     <input type="email" name="email" id="email" 
                                            value="{{ old('email', $user->email) }}" 
-                                           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition outline-none"
+                                           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition outline-none"
                                            placeholder="email@contoh.com"
                                            required>
                                 </div>

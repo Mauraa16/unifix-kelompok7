@@ -32,8 +32,9 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
-    {{-- HEADER (Fixed Top) --}}
-    <header class="fixed w-full top-0 z-50">
+    {{-- HEADER --}}
+    {{-- Class fixed dihapus disini karena sudah ada di dalam file include (header.blade.php) --}}
+    <header class="z-50">
         @auth
             @if(Auth::user()->role == 'admin')
                 @include('admin.header')
@@ -48,9 +49,8 @@
     </header>
 
     {{-- KONTEN UTAMA --}}
-    {{-- pt-24 memberikan jarak yang CUKUP agar header fixed tidak menutupi konten --}}
-    {{-- Jangan tambahkan padding top lagi di file view (index.blade.php) --}}
-    <main class="flex-grow pt-20 pb-10">
+    {{-- pt-[70px] digunakan agar padding persis sama dengan tinggi header (70px) --}}
+    <main class="flex-grow pt-[70px] pb-10">
         @yield('content')
     </main>
 
