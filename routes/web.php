@@ -23,7 +23,7 @@ use App\Http\Controllers\Auth\GoogleController;
 
 Route::redirect('/', '/login');
 
-// PERBAIKAN: Aktifkan verify => true untuk memunculkan rute verifikasi email
+// Verifikasi Email
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -31,7 +31,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // ====================================================================
 // RUTE MAHASISWA
 // ====================================================================
-// PERBAIKAN: Tambahkan middleware 'verified'
 Route::middleware(['auth', 'verified', 'role:mahasiswa'])->prefix('mahasiswa')->group(function () {
     Route::get('/beranda', [HomeController::class, 'mahasiswaBeranda'])->name('mahasiswa.beranda');
     Route::resource('laporan', LaporanController::class);
@@ -42,7 +41,6 @@ Route::middleware(['auth', 'verified', 'role:mahasiswa'])->prefix('mahasiswa')->
 // ====================================================================
 // RUTE PETUGAS
 // ====================================================================
-// PERBAIKAN: Tambahkan middleware 'verified'
 Route::middleware(['auth', 'verified', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])->name('dashboard.index');
     Route::get('/laporan', [PetugasLaporanController::class, 'index'])->name('laporan.index');
@@ -60,7 +58,6 @@ Route::middleware(['auth', 'verified', 'role:petugas'])->prefix('petugas')->name
 // ====================================================================
 // RUTE ADMIN
 // ====================================================================
-// PERBAIKAN: Tambahkan middleware 'verified'
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     
     Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
@@ -77,10 +74,15 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
     Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
 
-    // Route Google Login
-    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
-    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-});
+}); // <--- PENTING: Tutup Grup Admin di sini!
 
-// Route Publik
+// ====================================================================
+// RUTE PUBLIK & AUTH (Harus di luar middleware auth)
+// ====================================================================
+
+// Route Google Login
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+// Route Kontak
 Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
