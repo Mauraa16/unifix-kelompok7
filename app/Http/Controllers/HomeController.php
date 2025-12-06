@@ -11,7 +11,8 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // PERBAIKAN: Tambahkan 'verified' agar controller ini mengecek status verifikasi
+        $this->middleware(['auth', 'verified']);
     }
 
     public function index()
@@ -34,8 +35,6 @@ class HomeController extends Controller
     public function adminDashboard()
     {
         $totalUsers = User::count();
-        
-        // PERBAIKAN: Kode lebih bersih tanpa cek if class_exists
         $totalLaporan = Laporan::count();
         $laporanPending = Laporan::where('status', 'Belum Diproses')->count();
         $laporanSelesai = Laporan::where('status', 'Selesai')->count();

@@ -21,14 +21,17 @@ use App\Http\Controllers\ProfilMahasiswaController;
 */
 
 Route::redirect('/', '/login');
-Auth::routes();
+
+// PERBAIKAN: Aktifkan verify => true untuk memunculkan rute verifikasi email
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // ====================================================================
 // RUTE MAHASISWA
 // ====================================================================
-Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(function () {
+// PERBAIKAN: Tambahkan middleware 'verified'
+Route::middleware(['auth', 'verified', 'role:mahasiswa'])->prefix('mahasiswa')->group(function () {
     Route::get('/beranda', [HomeController::class, 'mahasiswaBeranda'])->name('mahasiswa.beranda');
     Route::resource('laporan', LaporanController::class);
     Route::get('/profil', [ProfilMahasiswaController::class, 'show'])->name('mahasiswa.profil');
@@ -38,7 +41,8 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->group(functi
 // ====================================================================
 // RUTE PETUGAS
 // ====================================================================
-Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
+// PERBAIKAN: Tambahkan middleware 'verified'
+Route::middleware(['auth', 'verified', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'petugasDashboard'])->name('dashboard.index');
     Route::get('/laporan', [PetugasLaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/{laporan}', [PetugasLaporanController::class, 'show'])->name('laporan.show');
@@ -55,11 +59,11 @@ Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')
 // ====================================================================
 // RUTE ADMIN
 // ====================================================================
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+// PERBAIKAN: Tambahkan middleware 'verified'
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     
     Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
     
-    // Perbaikan: Tambahkan except(['show']) karena kita tidak membuat view detail khusus untuk user ini
     Route::resource('mahasiswa', MahasiswaController::class)->except(['show']);
     Route::resource('petugas', PetugasController::class)->except(['show']);
 
