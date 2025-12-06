@@ -13,17 +13,17 @@ class Komentar extends Model
 
     protected $fillable = [
         'laporan_id',
-        'user_id',
+        'user_id',      // <--- MUST EXIST
         'isi_komentar',
     ];
-
-    public function laporan()
-    {
-        return $this->belongsTo(Laporan::class, 'laporan_id');
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function laporan()
+    {
+        return $this->belongsTo(Laporan::class);
     }
 }

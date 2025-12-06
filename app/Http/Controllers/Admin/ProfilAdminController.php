@@ -10,11 +10,14 @@ use App\Models\Laporan;
 
 class ProfilAdminController extends Controller
 {
+    /**
+     * Menampilkan halaman profil admin
+     */
     public function show()
     {
         $user = Auth::user();
         
-        // Statistik Ringkas untuk Admin
+        // Langsung ambil data statistik
         $totalUsers = User::count();
         $totalLaporan = Laporan::count();
         $totalLaporanSelesai = Laporan::where('status', 'Selesai')->count();
@@ -22,6 +25,9 @@ class ProfilAdminController extends Controller
         return view('admin.profil.index', compact('user', 'totalUsers', 'totalLaporan', 'totalLaporanSelesai'));
     }
 
+    /**
+     * Update data profil admin
+     */
     public function update(Request $request)
     {
         $user = Auth::user();

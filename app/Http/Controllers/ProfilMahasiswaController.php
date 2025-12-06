@@ -12,7 +12,7 @@ class ProfilMahasiswaController extends Controller
     {
         $user = Auth::user();
         
-        // Statistik Laporan Mahasiswa
+        // PERBAIKAN: Langsung ambil data (bersih)
         $laporanSaya = Laporan::where('user_id', $user->id)->count();
         $laporanSelesai = Laporan::where('user_id', $user->id)->where('status', 'Selesai')->count();
         $laporanProses = Laporan::where('user_id', $user->id)->where('status', 'Diproses')->count();

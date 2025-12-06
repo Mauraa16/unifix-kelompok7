@@ -9,20 +9,11 @@ use App\Models\Laporan;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * INDEX: "Penjaga Gerbang"
-     * Mengecek role user dan melempar ke dashboard yang sesuai.
-     */
     public function index()
     {
         $role = Auth::user()->role;
@@ -40,28 +31,15 @@ class HomeController extends Controller
         }
     }
 
-    // ====================================================================
-    // FUNGSI KHUSUS DASHBOARD
-    // ====================================================================
-
-    /**
-     * ADMIN DASHBOARD
-     */
     public function adminDashboard()
     {
         $totalUsers = User::count();
         
-        if (class_exists(Laporan::class)) {
-            $totalLaporan = Laporan::count();
-            $laporanPending = Laporan::where('status', 'Belum Diproses')->count();
-            $laporanSelesai = Laporan::where('status', 'Selesai')->count();
-            $recentLaporan = Laporan::with('user')->latest()->take(5)->get();
-        } else {
-            $totalLaporan = 0;
-            $laporanPending = 0;
-            $laporanSelesai = 0;
-            $recentLaporan = collect();
-        }
+        // PERBAIKAN: Kode lebih bersih tanpa cek if class_exists
+        $totalLaporan = Laporan::count();
+        $laporanPending = Laporan::where('status', 'Belum Diproses')->count();
+        $laporanSelesai = Laporan::where('status', 'Selesai')->count();
+        $recentLaporan = Laporan::with('user')->latest()->take(5)->get();
         
         $recentUsers = User::latest()->take(5)->get();
 
@@ -75,9 +53,6 @@ class HomeController extends Controller
         ));
     }
 
-    /**
-     * PETUGAS DASHBOARD
-     */
     public function petugasDashboard()
     {
         $totalLaporan          = Laporan::count();
@@ -116,21 +91,17 @@ class HomeController extends Controller
         ));
     }
 
-    /**
-     * MAHASISWA BERANDA (UPDATE)
-     * Menampilkan statistik dan riwayat laporan milik mahasiswa yang login.
-     */
     public function mahasiswaBeranda()
     {
         $userId = Auth::id();
 
-        // Ambil statistik laporan saya
+        // Statistik
         $totalLaporan   = Laporan::where('user_id', $userId)->count();
         $laporanPending = Laporan::where('user_id', $userId)->where('status', 'Belum Diproses')->count();
         $laporanProses  = Laporan::where('user_id', $userId)->where('status', 'Diproses')->count();
         $laporanSelesai = Laporan::where('user_id', $userId)->where('status', 'Selesai')->count();
 
-        // Ambil 3 laporan terakhir untuk ditampilkan di widget riwayat
+        // Riwayat
         $riwayatTerbaru = Laporan::where('user_id', $userId)
             ->latest()
             ->take(3)
@@ -140,7 +111,7 @@ class HomeController extends Controller
             'totalLaporan', 
             'laporanPending', 
             'laporanProses', 
-            'laporanSelesai',
+            'laporanSelesai', 
             'riwayatTerbaru'
         )); 
     }

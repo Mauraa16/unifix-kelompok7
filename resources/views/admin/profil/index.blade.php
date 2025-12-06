@@ -3,10 +3,11 @@
 @section('content')
 {{-- 
     PERBAIKAN: 
-    Class 'pt-28' (padding-top: 7rem) ditambahkan di div container utama.
-    Ini memberikan jarak yang cukup agar konten tidak tertutup oleh Header Admin yang Fixed.
+    Saya menghapus 'pt-28' di sini. 
+    Jarak atas sekarang dikendalikan sepenuhnya oleh layouts/app.blade.php (pt-24).
+    Ini membuat tampilan konsisten dan tidak terlalu turun.
 --}}
-<div class="container mx-auto px-4 pt-28 pb-12">
+<div class="container mx-auto px-4 pb-12">
     <div class="max-w-5xl mx-auto">
         
         <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
