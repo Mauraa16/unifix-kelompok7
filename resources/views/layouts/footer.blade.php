@@ -1,190 +1,181 @@
-<!-- UNIFIX Footer - Umum -->
 <footer class="bg-gradient-to-b from-gray-900 to-purple-900 text-white">
-    <div class="container mx-auto px-4 py-12">
-        <!-- Main Footer Content -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            <!-- Brand Section -->
+    <div class="container mx-auto px-4 py-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+            
             <div class="lg:col-span-1">
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg mr-3">
-                        <i class="fas fa-tools text-purple-600 text-lg"></i>
-                    </div>
-                    <span class="text-xl font-bold text-white">UNIFIX</span>
+                <div class="flex items-center mb-3">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 decoration-none group">
+                        <img src="{{ asset('images/logo.png') }}" 
+                             alt="UNIFIX Logo" 
+                             class="h-10 w-auto object-contain">
+                    </a>
                 </div>
-                <p class="text-purple-200 text-sm leading-relaxed mb-4">
+                <p class="text-purple-200 text-sm leading-relaxed">
                     Sistem Pelaporan dan Perbaikan Fasilitas Universitas Terintegrasi. 
                     Memberikan solusi cepat dan efisien untuk maintenance kampus.
                 </p>
-                <div class="flex items-center text-purple-200 text-sm">
-                    <i class="fas fa-university mr-2"></i>
-                    <span>Layanan Maintenance Kampus</span>
-                </div>
             </div>
-
-            <!-- Layanan -->
+            
             <div class="lg:col-span-1">
                 <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <i class="fas fa-concierge-bell mr-2 text-purple-300"></i>
                     Layanan
                 </h4>
                 <ul class="space-y-2">
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Pelaporan Kerusakan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Tracking Perbaikan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Status Laporan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Bantuan Teknis
-                        </a>
-                    </li>
+                    
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li>
+                                <a href="{{ route('admin.dashboard') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Dashboard Admin
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.laporan.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Pantau Laporan
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('mahasiswa.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Mahasiswa
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('petugas.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Petugas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.profil') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Profil
+                                </a>
+                            </li>
+
+                        @elseif (Auth::user()->role === 'petugas')
+                            <li>
+                                <a href="{{ route('petugas.dashboard.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Dashboard Petugas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('petugas.laporan.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Laporan Masuk
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('petugas.riwayat') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Riwayat Tugas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('petugas.profil') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Profil
+                                </a>
+                            </li>
+
+                        @else
+                            <li>
+                                <a href="{{ route('mahasiswa.beranda') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Beranda
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('laporan.create') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Buat Laporan Baru
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('laporan.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Status & Riwayat Laporan
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('mahasiswa.profil') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                    <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                    Kelola Profil
+                                </a>
+                            </li>
+                        @endif
+
+                    @else
+                        <li>
+                            <a href="{{ route('login') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                Login
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('register') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
+                                Daftar
+                            </a>
+                        </li>
+                    @endauth
+
                 </ul>
             </div>
 
-            <!-- Support -->
-            <div class="lg:col-span-1">
-                <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
-                    <i class="fas fa-headset mr-2 text-purple-300"></i>
-                    Bantuan
-                </h4>
-                <ul class="space-y-2">
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Pusat Bantuan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Panduan Penggunaan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            FAQ
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
-                            <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
-                            Kontak Support
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Kontak & Info -->
             <div class="lg:col-span-1">
                 <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <i class="fas fa-info-circle mr-2 text-purple-300"></i>
-                    Informasi
+                    Informasi & Kontak
                 </h4>
                 <div class="space-y-3">
+                    
                     <div class="flex items-center text-purple-200 text-sm">
                         <i class="fas fa-clock mr-3 text-purple-300"></i>
                         <span>Senin - Jumat: 08:00 - 16:00</span>
                     </div>
-                    <div class="flex items-center text-purple-200 text-sm">
-                        <i class="fas fa-phone mr-3 text-purple-300"></i>
-                        <span>+62 (021) 1234-5678</span>
-                    </div>
-                    <div class="flex items-center text-purple-200 text-sm">
-                        <i class="fas fa-envelope mr-3 text-purple-300"></i>
-                        <span>support@unifix.ac.id</span>
-                    </div>
+
                     <div class="flex items-center text-purple-200 text-sm">
                         <i class="fas fa-map-marker-alt mr-3 text-purple-300"></i>
                         <span>Gedung Rektorat Lt. 2</span>
                     </div>
+                    
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fas fa-envelope mr-3 text-purple-300"></i>
+                        <a href="mailto:support@unifix.ac.id" class="hover:text-white transition-colors duration-200">support@unifix.ac.id</a>
+                    </div>
+                    
+                    <div class="flex items-center text-purple-200 text-sm">
+                        <i class="fab fa-instagram mr-3 text-purple-300"></i>
+                        <a href="https://instagram.com/UNIFIX_Kampus" target="_blank" class="hover:text-white transition-colors duration-200">@UNIFIX_Kampus</a>
+                    </div>
+                    
                 </div>
             </div>
-        </div>
-
-        <!-- Bottom Footer -->
-        <div class="border-t border-purple-700 pt-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <!-- Copyright -->
-                <div class="mb-4 md:mb-0">
+            
+        </div> 
+        
+        <div class="border-t border-purple-700 pt-6"> 
+            <div class="flex flex-col items-center">
+                <div class="text-center">
                     <p class="text-purple-300 text-sm">
-                        &copy; {{ date('Y') }} <span class="font-semibold text-white">UNIFIX</span>. 
-                        All rights reserved.
+                        &copy; 2025 <span class="font-semibold text-white">UNIFIX</span>. All rights reserved.
                     </p>
                     <p class="text-purple-400 text-xs mt-1">
                         Sistem Pelaporan Fasilitas Universitas
                     </p>
                 </div>
-
-                <!-- Social Links -->
-                <div class="flex space-x-4">
-                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
-                       aria-label="Facebook UNIFIX">
-                        <i class="fab fa-facebook-f text-white group-hover:scale-110 transition-transform"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
-                       aria-label="Twitter UNIFIX">
-                        <i class="fab fa-twitter text-white group-hover:scale-110 transition-transform"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
-                       aria-label="Instagram UNIFIX">
-                        <i class="fab fa-instagram text-white group-hover:scale-110 transition-transform"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors duration-200 group"
-                       aria-label="Email UNIFIX">
-                        <i class="fas fa-envelope text-white group-hover:scale-110 transition-transform"></i>
-                    </a>
-                </div>
-
-                <!-- Legal Links -->
-                <div class="mt-4 md:mt-0 flex space-x-6">
-                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
-                        Kebijakan Privasi
-                    </a>
-                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
-                        Syarat & Ketentuan
-                    </a>
-                    <a href="#" class="text-purple-300 hover:text-white text-sm transition-colors duration-200">
-                        Sitemap
-                    </a>
-                </div>
             </div>
         </div>
-
-        <!-- University Badge -->
-        <div class="mt-6 pt-6 border-t border-purple-700">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-center md:text-left">
-                    <p class="text-purple-400 text-xs">
-                        Layanan Resmi Maintenance Fasilitas Kampus
-                    </p>
-                </div>
-                <div class="mt-2 md:mt-0">
-                    <div class="flex items-center space-x-2 text-purple-300 text-sm">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Terpercaya • Aman • Terintegrasi</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </footer>
 
-<!-- Quick Support Button (Fixed) -->
 <div class="fixed bottom-6 right-6 z-50">
     <button class="w-14 h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group"
             onclick="openSupportModal()">
@@ -195,7 +186,6 @@
     </button>
 </div>
 
-<!-- Support Modal (Hidden by default) -->
 <div id="supportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all">
         <div class="bg-gradient-to-r from-purple-600 to-purple-700 p-6 rounded-t-xl">
@@ -253,7 +243,6 @@ function closeSupportModal() {
     document.body.classList.remove('overflow-hidden');
 }
 
-// Close modal when clicking outside
 document.getElementById('supportModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeSupportModal();
