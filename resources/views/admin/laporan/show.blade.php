@@ -4,14 +4,12 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
         
-        <!-- Tombol Kembali (Dinamis untuk Admin/Petugas) -->
         <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.index' : 'petugas.laporan.index') }}" 
            class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-purple-600 mb-6 transition-colors">
             <i class="fas fa-arrow-left mr-2"></i>
             Kembali ke Daftar Laporan
         </a>
 
-        <!-- Notifikasi Sukses -->
         @if (session('success'))
             <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-sm" role="alert">
                 <div class="flex items-center">
@@ -23,13 +21,11 @@
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Kolom Kiri: Detail Laporan -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gray-50/50">
                         <div class="flex justify-between items-start">
                             <div>
-                                <!-- Badge Status -->
                                 <span class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wide
                                     {{ $laporan->status == 'Selesai' ? 'bg-green-100 text-green-700 border border-green-200' : 
                                       ($laporan->status == 'Diproses' ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-yellow-100 text-yellow-700 border border-yellow-200') }}">
@@ -51,7 +47,6 @@
                     </div>
 
                     <div class="p-6">
-                        <!-- Bukti Foto -->
                         @if ($laporan->foto)
                             <div class="mb-6">
                                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Bukti Foto</h3>
@@ -63,13 +58,11 @@
                             </div>
                         @endif
 
-                        <!-- Deskripsi -->
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Deskripsi Masalah</h3>
                             <p class="text-gray-800 leading-relaxed text-lg">{{ $laporan->deskripsi }}</p>
                         </div>
 
-                        <!-- Lokasi -->
                         <div>
                             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Lokasi Kejadian</h3>
                             <div class="flex items-start text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100">
@@ -79,41 +72,55 @@
                         </div>
                     </div>
                     
-                    <!-- Info Pelapor -->
                     <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Dilaporkan Oleh</h3>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-sm">
-                                {{ strtoupper(substr($laporan->user->name, 0, 1)) }}
+                        @if ($laporan->user)
+                            <div class="flex items-center space-x-3">
+                                
+                                @if (isset($laporan->user->foto_profil) && $laporan->user->foto_profil)
+                                    <img src="{{ asset('storage/' . $laporan->user->foto_profil) }}" 
+                                         alt="{{ $laporan->user->name }}" 
+                                         class="w-10 h-10 rounded-full object-cover shadow-sm">
+                                @else
+                                    {{-- Tampilkan inisial jika tidak ada foto profil --}}
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-sm">
+                                        {{ strtoupper(substr($laporan->user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                                
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900">{{ $laporan->user->name }}</h3>
+                                    <p class="text-xs text-gray-500">{{ $laporan->user->email }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="text-sm font-bold text-gray-900">{{ $laporan->user->name }}</h3>
-                                <p class="text-xs text-gray-500">{{ $laporan->user->email }}</p>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Kolom Kanan: Aksi & Komentar -->
             <div class="space-y-6">
                 
 
-
-                <!-- Komentar / Tanggapan -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-[500px]">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                         <i class="fas fa-comments text-blue-600 mr-2"></i> Tanggapan
                     </h3>
                     
-                    <!-- Daftar Komentar (Scrollable) -->
                     <div class="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 custom-scrollbar">
                         @forelse ($laporan->komentar as $komentar)
                         <div class="flex space-x-3">
                             <div class="flex-shrink-0">
-                                <div class="w-8 h-8 rounded-full {{ $komentar->user->role == 'mahasiswa' ? 'bg-gray-400' : 'bg-purple-600' }} flex items-center justify-center text-white font-bold text-xs">
-                                    {{ strtoupper(substr($komentar->user->name, 0, 1)) }}
-                                </div>
+
+                                @if (isset($komentar->user->foto_profil) && $komentar->user->foto_profil)
+                                    <img src="{{ asset('storage/' . $komentar->user->foto_profil) }}" 
+                                         alt="{{ $komentar->user->name }}" 
+                                         class="w-8 h-8 rounded-full object-cover shadow-sm">
+                                @else
+                                    <div class="w-8 h-8 rounded-full {{ $komentar->user->role == 'mahasiswa' ? 'bg-gray-400' : 'bg-purple-600' }} flex items-center justify-center text-white font-bold text-xs">
+                                        {{ strtoupper(substr($komentar->user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+
                             </div>
                             <div class="flex-1">
                                 <div class="bg-gray-100 rounded-2xl rounded-tl-none p-3">
@@ -135,7 +142,6 @@
                         @endforelse
                     </div>
 
-                    <!-- Form Tambah Komentar -->
                     <div class="mt-auto pt-4 border-t border-gray-100">
                         <form action="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.storeKomentar' : 'petugas.laporan.storeKomentar', $laporan->id) }}" method="POST">
                             @csrf
@@ -157,7 +163,6 @@
     </div>
 </div>
 
-<!-- Menambahkan CSS untuk custom scrollbar (opsional tapi bagus) -->
 <style>
     .custom-scrollbar::-webkit-scrollbar {
         width: 6px;

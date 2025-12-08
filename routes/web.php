@@ -67,15 +67,18 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::resource('mahasiswa', MahasiswaController::class)->except(['show']);
     Route::resource('petugas', PetugasController::class)->except(['show']);
 
-    // Laporan
     Route::get('laporan', [KelolaLaporanController::class, 'index'])->name('admin.laporan.index');
     Route::get('laporan/{laporan}', [KelolaLaporanController::class, 'show'])->name('admin.laporan.show');
     Route::post('laporan/{laporan}/komentar', [KelolaLaporanController::class, 'storeKomentar'])->name('admin.laporan.storeKomentar');
-    
-    // Profil Admin
+
     Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
     Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
-
+    Route::prefix('profil')->name('admin.profil.')->group(function () {
+        Route::get('/', [ProfilAdminController::class, 'show'])->name('index'); 
+        Route::put('/', [ProfilAdminController::class, 'update'])->name('update'); 
+        Route::post('/upload-photo', [ProfilAdminController::class, 'uploadPhoto'])->name('upload_photo');
+        Route::delete('/delete-photo', [ProfilAdminController::class, 'deletePhoto'])->name('delete_photo');
+    });
 }); 
 
 // ====================================================================

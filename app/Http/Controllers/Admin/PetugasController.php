@@ -10,26 +10,26 @@ use Illuminate\Validation\Rules;
 
 class PetugasController extends Controller
 {
-    /**
-     * Menampilkan daftar semua petugas.
-     */
-    public function index()
-    {
-        $petugas = User::where('role', 'petugas')->latest()->paginate(10);
-        return view('admin.petugas.index', compact('petugas'));
+    public function index(Request $request)
+{
+    $search = $request->query('search');
+    $query = User::where('role', 'petugas'); 
+    if ($search) {
+        $search_lower = strtolower($search);
+        $query->where(function ($q) use ($search_lower) {
+            $q->whereRaw('LOWER(name) LIKE ?', ['%' . $search_lower . '%'])
+              ->orWhereRaw('LOWER(email) LIKE ?', ['%' . $search_lower . '%']);
+        });
     }
-
-    /**
-     * Menampilkan form tambah petugas.
-     */
+    $petugas = $query->latest()->paginate(10);
+    return view('admin.petugas.index', compact('petugas'));
+}
+    
     public function create()
     {
         return view('admin.petugas.create');
     }
 
-    /**
-     * Menyimpan petugas baru (role di-force 'petugas').
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -42,31 +42,25 @@ class PetugasController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'petugas', // <-- PERUBAHAN: Role di-set otomatis
+            'role' => 'petugas', 
         ]);
 
         return redirect()->route('petugas.index')
-                         ->with('success', 'Akun petugas berhasil ditambahkan.');
+                            ->with('success', 'Akun petugas berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan form edit petugas.
-     */
-    public function edit(User $petuga) // Nama parameter: petuga
+    public function edit(User $petuga)
     {
-        // Pastikan kita hanya mengedit petugas
+
         if ($petuga->role !== 'petugas') {
             return redirect()->route('petugas.index')->with('error', 'User ini bukan petugas.');
         }
         return view('admin.petugas.edit', compact('petuga'));
     }
 
-    /**
-     * Update data petugas (role tidak bisa diubah).
-     */
     public function update(Request $request, User $petuga)
     {
-        // Pastikan kita hanya mengupdate petugas
+
         if ($petuga->role !== 'petugas') {
             return redirect()->route('petugas.index')->with('error', 'User ini bukan petugas.');
         }
@@ -74,7 +68,7 @@ class PetugasController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class.',email,'.$petuga->id],
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()], // Password boleh kosong
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()], 
         ]);
 
         $petuga->name = $request->name;
@@ -87,15 +81,11 @@ class PetugasController extends Controller
         $petuga->save();
 
         return redirect()->route('petugas.index')
-                         ->with('success', 'Akun petugas berhasil diperbarui.');
+                            ->with('success', 'Akun petugas berhasil diperbarui.');
     }
 
-    /**
-     * Hapus petugas.
-     */
     public function destroy(User $petuga)
     {
-        // Pastikan kita hanya menghapus petugas
         if ($petuga->role !== 'petugas') {
             return redirect()->route('petugas.index')->with('error', 'User ini bukan petugas.');
         }
@@ -103,6 +93,6 @@ class PetugasController extends Controller
         $petuga->delete();
         
         return redirect()->route('petugas.index')
-                         ->with('success', 'Akun petugas berhasil dihapus.');
+                            ->with('success', 'Akun petugas berhasil dihapus.');
     }
 }

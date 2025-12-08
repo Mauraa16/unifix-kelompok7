@@ -4,24 +4,75 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">Kelola Laporan</h1>
-                <p class="text-gray-600 mt-1">Tinjau, proses, dan kelola semua laporan yang masuk.</p>
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Tinjau Laporan</h1>
+            <p class="text-gray-600 mt-1">Tinjau dan pantau semua laporan yang masuk.</p>
+        </div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+
+            <div class="w-full md:w-3/5 lg:max-w-md">
+                <form action="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.index' : 'petugas.laporan.index') }}" method="GET" class="relative">
+                    @if(request('status'))
+                        <input type="hidden" name="status" value="{{ request('status') }}">
+                    @endif
+                    
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Cari Pelapor, Judul, atau Lokasi..." 
+                        value="{{ request('search') }}"
+                        class="w-full pl-10 pr-12 py-2 border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 transition duration-150"
+                        aria-label="Cari Laporan"
+                    >
+                    
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                        <i class="fas fa-search"></i>
+                    </div>
+
+                    @if(request('search'))
+                        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.index' : 'petugas.laporan.index', ['status' => request('status')]) }}" 
+                           class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-red-500 transition"
+                           title="Hapus Filter Pencarian">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    @else
+                        <button type="submit" 
+                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-purple-600 hover:text-purple-800 transition"
+                                title="Mulai Pencarian">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    @endif
+                </form>
             </div>
-            <!-- Filter Status -->
-            <form method="GET" action="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.index' : 'petugas.laporan.index') }}">
-                <select name="status" onchange="this.form.submit()" class="mt-4 md:mt-0 block w-full md:w-56 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    <option value="">Semua Status</option>
-                    <option value="Belum Diproses" {{ request('status') == 'Belum Diproses' ? 'selected' : '' }}>Belum Diproses</option>
-                    <option value="Diproses" {{ request('status') == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                    <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                </select>
-            </form>
+
+            <div class="w-full md:w-auto flex-shrink-0">
+                <form method="GET" action="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.index' : 'petugas.laporan.index') }}" class="relative inline-block w-full md:w-56">
+                    @if(request('search'))
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                    @endif
+                    
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                        <i class="fas fa-filter"></i> 
+                    </div>
+                    
+                    <select name="status" onchange="this.form.submit()" 
+                            class="block w-full pl-10 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition duration-150">
+                        <option value="">Semua Status</option>
+                        <option value="Belum Diproses" {{ request('status') == 'Belum Diproses' ? 'selected' : '' }}>Belum Diproses</option>
+                        <option value="Diproses" {{ request('status') == 'Diproses' ? 'selected' : '' }}>Diproses</option>
+                        <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                    </select>
+                </form>
+            </div>
         </div>
 
-        <!-- Pesan Sukses -->
+        @if(request('search'))
+            <p class="mt-2 mb-6 text-sm text-gray-500">
+                Hasil pencarian untuk: <span class="font-semibold text-gray-800">"{{ request('search') }}"</span>
+            </p>
+        @endif
+        
         @if (session('success'))
             <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6" role="alert">
                 <p>{{ session('success') }}</p>
@@ -33,7 +84,6 @@
             </div>
         @endif
 
-        <!-- Tabel Daftar Laporan -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -81,12 +131,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $l->created_at->format('d M Y') }}</td>
                                 
-                                {{-- =============================================== --}}
-                                {{-- == BAGIAN AKSI YANG DIPERBAIKI == --}}
-                                {{-- =============================================== --}}
+                                {{-- Kolom Aksi --}}
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
 
-                                    <!-- Tombol Lihat (Semua Admin/Petugas) -->
                                     <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.laporan.show' : 'petugas.laporan.show', $l->id) }}"
                                        class="text-blue-600 hover:text-blue-900"
                                        title="Lihat & Tanggapi">
@@ -109,10 +156,9 @@
                 </table>
             </div>
 
-            <!-- Paginasi -->
             @if ($laporan->hasPages())
                 <div class="p-4 border-t border-gray-100">
-                    {{ $laporan->links() }}
+                    {{ $laporan->appends(['status' => request('status'), 'search' => request('search')])->links() }}
                 </div>
             @endif
         </div>

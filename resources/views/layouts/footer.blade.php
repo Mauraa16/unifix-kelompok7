@@ -51,7 +51,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.profil') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
+                                <a href="{{ route('admin.profil.index') }}" class="text-purple-200 hover:text-white transition-colors duration-200 flex items-center group">
                                     <i class="fas fa-chevron-right text-xs mr-2 group-hover:translate-x-1 transition-transform"></i>
                                     Kelola Profil
                                 </a>

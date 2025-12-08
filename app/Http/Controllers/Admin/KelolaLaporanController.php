@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
-use App\Models\Komentar;
+use App\Models\Komentar; 
 use App\Models\KategoriLaporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,25 +12,40 @@ use Illuminate\Support\Facades\Storage;
 
 class KelolaLaporanController extends Controller
 {
-    /**
-     * Pastikan hanya admin dan petugas yang bisa akses.
-     */
+
     public function __construct()
     {
-        // Semua role (admin/petugas) bisa mengakses halaman ini
         $this->middleware(['auth', 'role:admin,petugas']);
     }
 
-    /**
-     * Menampilkan daftar SEMUA laporan.
-     */
     public function index(Request $request)
     {
+        $status = $request->query('status');
+        $search = $request->query('search'); 
+
         $query = Laporan::with('user', 'kategori')->latest();
 
-        // Filter berdasarkan status
-        if ($request->has('status') && $request->status != '') {
-            $query->where('status', $request->status);
+        if ($status && $status != '') {
+            $query->where('status', $status);
+        }
+
+        if ($search) {
+            $searchWildcard = '%' . strtolower($search) . '%'; 
+
+            $query->where(function ($q) use ($searchWildcard) {
+                
+                $q->whereRaw('LOWER(judul) LIKE ?', [$searchWildcard])
+                  
+                  ->orWhereRaw('LOWER(lokasi) LIKE ?', [$searchWildcard])
+                  
+                  ->orWhereHas('user', function ($q_user) use ($searchWildcard) {
+                      $q_user->whereRaw('LOWER(name) LIKE ?', [$searchWildcard]);
+                  })
+                  
+                  ->orWhereHas('kategori', function ($q_kategori) use ($searchWildcard) {
+                      $q_kategori->whereRaw('LOWER(nama_kategori) LIKE ?', [$searchWildcard]);
+                  });
+            });
         }
 
         $laporan = $query->paginate(10)->withQueryString();
@@ -38,19 +53,12 @@ class KelolaLaporanController extends Controller
         return view('admin.laporan.index', compact('laporan'));
     }
 
-    /**
-     * Menampilkan detail laporan untuk admin/petugas.
-     */
     public function show(Laporan $laporan)
     {
-        // Load semua relasi: pelapor, kategori, dan komentar (beserta user yg komen)
-        $laporan->load('user', 'kategori', 'komentar.user');
+        $laporan->load('user', 'kategori', 'komentar.user'); 
         return view('admin.laporan.show', compact('laporan'));
     }
 
-    /**
-     * Simpan komentar baru dari admin/petugas.
-     */
     public function storeKomentar(Request $request, Laporan $laporan)
     {
         $request->validate([
@@ -59,7 +67,7 @@ class KelolaLaporanController extends Controller
 
         Komentar::create([
             'laporan_id' => $laporan->id,
-            'user_id' => Auth::id(), // ID Admin/Petugas yang sedang login
+            'user_id' => Auth::id(), 
             'isi_komentar' => $request->isi_komentar,
         ]);
 
