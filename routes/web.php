@@ -36,6 +36,8 @@ Route::middleware(['auth', 'verified', 'role:mahasiswa'])->prefix('mahasiswa')->
     Route::resource('laporan', LaporanController::class);
     Route::get('/profil', [ProfilMahasiswaController::class, 'show'])->name('mahasiswa.profil');
     Route::put('/profil', [ProfilMahasiswaController::class, 'update'])->name('mahasiswa.profil.update');
+    Route::delete('/profil/foto', [ProfilMahasiswaController::class, 'deletePhoto'])->name('mahasiswa.profil.delete_photo');
+    Route::post('/profil/upload-photo', [ProfilMahasiswaController::class, 'uploadPhoto'])->name('mahasiswa.profil.upload_photo');
 });
 
 // ====================================================================
@@ -74,7 +76,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
     Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
 
-}); // <--- PENTING: Tutup Grup Admin di sini!
+}); 
 
 // ====================================================================
 // RUTE PUBLIK & AUTH (Harus di luar middleware auth)

@@ -4,23 +4,8 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         
-        <!-- Tombol Kembali & Navigasi Breadcrumb -->
+        <!-- Tombol Kembali -->
         <div class="mb-6">
-            <nav aria-label="breadcrumb" class="text-sm text-gray-500 mb-2">
-                <ol class="flex space-x-2">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('home') }}" class="hover:text-purple-600 transition">Beranda</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span class="mx-1">/</span>
-                        <a href="{{ route('laporan.index') }}" class="hover:text-purple-600 transition">Kelola Laporan</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <span class="mx-1">/</span>
-                        <span class="font-medium text-gray-700">Detail Laporan</span>
-                    </li>
-                </ol>
-            </nav>
             <a href="{{ route('laporan.index') }}" 
                class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>
