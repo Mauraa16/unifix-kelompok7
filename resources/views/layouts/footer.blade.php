@@ -147,7 +147,7 @@
                     
                     <div class="flex items-center text-purple-200 text-sm">
                         <i class="fas fa-envelope mr-3 text-purple-300"></i>
-                        <a href="mailto:support@unifix.ac.id" class="hover:text-white transition-colors duration-200">support@unifix.ac.id</a>
+                        <a href="mailto:support@unifix.ac.id" class="hover:text-white transition-colors duration-200">unifixa00@gmail.com</a>
                     </div>
                     
                     <div class="flex items-center text-purple-200 text-sm">
@@ -213,11 +213,11 @@
                     </div>
                     <div>
                         <p class="font-semibold text-gray-800">Telepon</p>
-                        <p class="text-sm text-gray-600">+62 (021) 1234-5678</p>
+                        <p class="text-sm text-gray-600">(+62)852-6698-5976</p>
                     </div>
                 </a>
                 
-                <a href="mailto:support@unifix.ac.id" 
+                <a href="mailto:unifixa00@gmail.com" 
                    class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-purple-50 transition-colors group">
                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
                         <i class="fas fa-envelope text-blue-600"></i>
