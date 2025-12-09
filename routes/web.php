@@ -7,9 +7,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LaporanController; 
 use App\Http\Controllers\Admin\MahasiswaController; 
-use App\Http\Controllers\Admin\PetugasController; 
+use App\Http\Controllers\Admin\PetugasController as AdminPetugasController; // Rename untuk menghindari konflik
 use App\Http\Controllers\Admin\KelolaLaporanController; 
-use App\Http\Controllers\Petugas\ProfilPetugasController; 
+use App\Http\Controllers\Petugas\ProfilPetugasController; // Import Controller yang relevan
 use App\Http\Controllers\Petugas\PetugasLaporanController; 
 use App\Http\Controllers\Admin\ProfilAdminController; 
 use App\Http\Controllers\ProfilMahasiswaController;
@@ -23,7 +23,6 @@ use App\Http\Controllers\Auth\GoogleController;
 
 Route::redirect('/', '/login');
 
-// Verifikasi Email
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -36,8 +35,8 @@ Route::middleware(['auth', 'verified', 'role:mahasiswa'])->prefix('mahasiswa')->
     Route::resource('laporan', LaporanController::class);
     Route::get('/profil', [ProfilMahasiswaController::class, 'show'])->name('mahasiswa.profil');
     Route::put('/profil', [ProfilMahasiswaController::class, 'update'])->name('mahasiswa.profil.update');
-    Route::delete('/profil/foto', [ProfilMahasiswaController::class, 'deletePhoto'])->name('mahasiswa.profil.delete_photo');
     Route::post('/profil/upload-photo', [ProfilMahasiswaController::class, 'uploadPhoto'])->name('mahasiswa.profil.upload_photo');
+    Route::delete('/profil/foto', [ProfilMahasiswaController::class, 'deletePhoto'])->name('mahasiswa.profil.delete_photo');
 });
 
 // ====================================================================
@@ -53,8 +52,12 @@ Route::middleware(['auth', 'verified', 'role:petugas'])->prefix('petugas')->name
     Route::get('/laporan/status/diproses', [PetugasLaporanController::class, 'filterDiproses'])->name('laporan.proses');
     Route::get('/laporan/status/selesai', [PetugasLaporanController::class, 'filterSelesai'])->name('laporan.selesai');
     Route::get('/riwayat', [PetugasLaporanController::class, 'riwayat'])->name('riwayat');
+
     Route::get('/profil', [ProfilPetugasController::class, 'show'])->name('profil');
     Route::put('/profil/update', [ProfilPetugasController::class, 'update'])->name('profil.update');
+    
+    Route::put('/profil/foto/update-photo', [ProfilPetugasController::class, 'updatePhoto'])->name('profil.update_photo'); 
+    Route::delete('/profil/foto/delete', [ProfilPetugasController::class, 'deletePhoto'])->name('profil.delete_photo');
 });
 
 // ====================================================================
@@ -65,14 +68,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
     
     Route::resource('mahasiswa', MahasiswaController::class)->except(['show']);
-    Route::resource('petugas', PetugasController::class)->except(['show']);
-
+    Route::resource('petugas', AdminPetugasController::class)->except(['show']); // Menggunakan nama alias
+    
     Route::get('laporan', [KelolaLaporanController::class, 'index'])->name('admin.laporan.index');
     Route::get('laporan/{laporan}', [KelolaLaporanController::class, 'show'])->name('admin.laporan.show');
     Route::post('laporan/{laporan}/komentar', [KelolaLaporanController::class, 'storeKomentar'])->name('admin.laporan.storeKomentar');
 
-    Route::get('/profil', [ProfilAdminController::class, 'show'])->name('admin.profil');
-    Route::put('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
     Route::prefix('profil')->name('admin.profil.')->group(function () {
         Route::get('/', [ProfilAdminController::class, 'show'])->name('index'); 
         Route::put('/', [ProfilAdminController::class, 'update'])->name('update'); 

@@ -7,8 +7,8 @@
                 {{-- Logo Gambar & Teks --}}
                 <a href="{{ route('petugas.dashboard.index') }}" class="flex items-center gap-2 hover:opacity-90 transition decoration-none">
                     <img src="{{ asset('images/logo.png') }}" 
-                         alt="Logo UNIFIX" 
-                         class="h-12 w-auto object-contain">
+                          alt="Logo UNIFIX" 
+                          class="h-12 w-auto object-contain">
                 </a>
 
                 {{-- MENU DESKTOP --}}
@@ -16,34 +16,27 @@
                     <a href="{{ route('petugas.dashboard.index') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition decoration-none
                               {{ request()->routeIs('petugas.dashboard.index') 
-                                    ? 'bg-purple-900 bg-opacity-50' 
-                                    : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
+                                      ? 'bg-purple-900 bg-opacity-50' 
+                                      : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
                     </a>
 
                     <a href="{{ route('petugas.laporan.index') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition decoration-none
                               {{ request()->routeIs('petugas.laporan.*') 
-                                    ? 'bg-purple-900 bg-opacity-50' 
-                                    : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
+                                      ? 'bg-purple-900 bg-opacity-50' 
+                                      : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-clipboard-list mr-1"></i> Laporan
                     </a>
 
                     <a href="{{ route('petugas.riwayat') }}"
                        class="px-3 py-2 rounded-md text-sm font-medium transition decoration-none
                               {{ request()->routeIs('petugas.riwayat') 
-                                    ? 'bg-purple-900 bg-opacity-50' 
-                                    : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
+                                      ? 'bg-purple-900 bg-opacity-50' 
+                                      : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
                         <i class="fas fa-history mr-1"></i> Riwayat
                     </a>
 
-                    <a href="{{ route('petugas.profil') }}"
-                       class="px-3 py-2 rounded-md text-sm font-medium transition decoration-none
-                              {{ request()->routeIs('petugas.profil') 
-                                    ? 'bg-purple-900 bg-opacity-50' 
-                                    : 'hover:bg-purple-500 hover:bg-opacity-30' }}">
-                        <i class="fas fa-user mr-1"></i> Profil
-                    </a>
                 </div>
             </div>
 
@@ -51,16 +44,36 @@
             <div class="flex items-center gap-4">
                 @auth
                 <div class="hidden md:flex items-center gap-4">
-                    <div class="flex items-center gap-3 bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
-                        <div class="w-7 h-7 rounded-full bg-white text-purple-700 flex items-center justify-center text-xs font-bold">
-                            <i class="fas fa-user"></i>
+                    
+                    @php
+                        $petugasUser = Auth::user();
+                        $petugasFotoUrl = $petugasUser->foto_profil ? Storage::url($petugasUser->foto_profil) : null;
+                    @endphp
+
+                    <a href="{{ route('petugas.profil') }}" 
+                       class="flex items-center gap-3 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 hover:bg-white/20 transition decoration-none group"
+                       title="Kelola Profil">
+
+                        {{-- FOTO PROFIL ATAU INISIAL --}}
+                        <div class="w-7 h-7 rounded-full bg-white text-purple-700 flex items-center justify-center text-xs font-bold overflow-hidden border border-white/50">
+                            @if ($petugasFotoUrl)
+                                <img src="{{ $petugasFotoUrl }}" 
+                                    alt="Foto Profil" 
+                                    class="w-full h-full object-cover">
+                            @else
+                                {{ strtoupper(substr($petugasUser->name, 0, 1)) }}
+                            @endif
                         </div>
+                        
                         <div class="flex flex-col">
-                            <span class="text-xs font-semibold leading-none">{{ Auth::user()->name }}</span>
+                            <span class="text-xs font-semibold leading-none text-white group-hover:text-gray-100">
+                                {{ $petugasUser->name }}
+                            </span>
                             <span class="text-[10px] text-purple-200 leading-none mt-0.5">Petugas</span>
                         </div>
-                    </div>
-
+                    </a>
+                    
+                    {{-- TOMBOL LOGOUT --}}
                     <a href="{{ route('logout') }}" 
                        onclick="event.preventDefault(); document.getElementById('logout-form-petugas').submit();"
                        class="bg-red-500/20 hover:bg-red-500 text-white p-2 rounded-full transition duration-200 border border-red-400/30 flex items-center justify-center decoration-none"
@@ -95,20 +108,25 @@
             <a href="{{ route('petugas.riwayat') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 decoration-none text-white {{ request()->routeIs('petugas.riwayat') ? 'bg-purple-900' : '' }}">
                 <i class="fas fa-history mr-2"></i> Riwayat
             </a>
-            <a href="{{ route('petugas.profil') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-500 decoration-none text-white {{ request()->routeIs('petugas.profil') ? 'bg-purple-900' : '' }}">
-                <i class="fas fa-user mr-2"></i> Profil
-            </a>
+
             @auth
             <div class="border-t border-purple-500 pt-4 pb-2">
-                <div class="flex items-center px-3 mb-2">
-                    <div class="w-8 h-8 rounded-full bg-purple-800 flex items-center justify-center border-2 border-purple-400">
-                        <i class="fas fa-user"></i>
+                <a href="{{ route('petugas.profil') }}" class="flex items-center px-3 mb-2 decoration-none text-white hover:text-gray-100">
+                    {{-- FOTO PROFIL ATAU INISIAL (MOBILE) --}}
+                    <div class="w-8 h-8 rounded-full bg-purple-800 flex items-center justify-center border-2 border-purple-400 overflow-hidden">
+                        @if ($petugasFotoUrl)
+                            <img src="{{ $petugasFotoUrl }}" 
+                                alt="Foto Profil" 
+                                class="w-full h-full object-cover">
+                        @else
+                            <i class="fas fa-user"></i>
+                        @endif
                     </div>
                     <div class="ml-3">
-                        <div class="text-base font-medium">{{ Auth::user()->name }}</div>
-                        <div class="text-sm font-medium text-purple-300">{{ Auth::user()->email }}</div>
+                        <div class="text-base font-medium">{{ $petugasUser->name }}</div>
+                        <div class="text-sm font-medium text-purple-300">{{ $petugasUser->email }}</div>
                     </div>
-                </div>
+                </a>
                 <a href="{{ route('logout') }}" class="block px-3 py-2 rounded-md text-base font-medium text-purple-200 hover:bg-red-500 decoration-none"
                    onclick="event.preventDefault(); document.getElementById('logout-form-mobile-petugas').submit();">
                     <i class="fas fa-sign-out-alt mr-2"></i> Keluar

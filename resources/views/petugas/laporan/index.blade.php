@@ -6,7 +6,7 @@
         
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Daftar Laporan</h1>
-            <p class="text-gray-600 mt-1">Lihat dan kelola semua laporan yang masuk.</p>
+            <p class="text-gray-600 mt-1">Lihat dan kelola semua laporan yang masuk</p>
         </div>
         
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">

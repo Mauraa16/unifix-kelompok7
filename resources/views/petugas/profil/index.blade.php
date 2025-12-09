@@ -1,237 +1,502 @@
 @extends('layouts.app')
 
 @section('content')
+@php 
+    // Siapkan Cache Buster
+    $cacheBuster = \Carbon\Carbon::parse($user->updated_at)->timestamp;
+
+    // URL foto profil dari database
+    // Rute: petugas.profil.show menggunakan variabel $user
+    $fotoProfilUrl = $user->foto_profil 
+        ? asset('storage/' . $user->foto_profil) . '?v=' . $cacheBuster 
+        : '';
+    
+    // Tentukan apakah user memiliki foto profil
+    $hasPhoto = !empty($user->foto_profil);
+
+    $totalLaporanDitangani = $totalLaporanDitangani ?? 0;
+    $totalKomentar = $totalKomentar ?? 0;
+    $totalLaporanSelesai = $totalLaporanSelesai ?? 0;
+@endphp
+
 <div class="container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Profil Petugas</h1>
-            <p class="text-gray-600 mt-2">Kelola informasi akun Anda</p>
+    <div class="max-w-5xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Profil Petugas</h1>
+                <p class="text-gray-600 mt-1">Kelola informasi akun dan performa penanganan laporan Anda.</p>
+            </div>
+            <div class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-bold flex items-center shadow-sm">
+                <i class="fas fa-user-tie mr-2"></i> Role: Petugas
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Sidebar Menu -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <!-- User Info Card -->
-                    <div class="bg-gradient-to-r from-purple-600 to-purple-700 p-6 text-white">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                                <span class="text-xl font-bold">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                            </div>
-                            <div>
-                                <h2 class="font-bold text-lg">{{ Auth::user()->name }}</h2>
-                                <p class="text-purple-100 text-sm">{{ Auth::user()->email }}</p>
-                                <span class="inline-block mt-1 px-2 py-1 bg-white/20 rounded-full text-xs">
-                                    <i class="fas fa-shield-alt mr-1"></i>Petugas
-                                </span>
+            
+            <div class="lg:col-span-1 space-y-6">
+                
+                {{-- CARD PROFIL KIRI --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
+                    <div class="h-28 bg-gradient-to-r from-purple-600 to-blue-700"></div> 
+                    
+                    <div class="text-center -mt-14 pb-6">
+                        {{-- AREA FOTO PROFIL DENGAN ICON AKSI --}}
+                        <div class="w-28 h-28 mx-auto relative cursor-pointer group/photo" onclick="openPhotoActionModal(event)">
+                            <div class="w-full h-full mx-auto bg-white rounded-full p-1.5 shadow-lg">
+                                
+                                {{-- TAMPILAN FOTO UTAMA --}}
+                                @if ($hasPhoto)
+                                    <img src="{{ $fotoProfilUrl }}" 
+                                        alt="Foto Profil" 
+                                        class="w-full h-full object-cover rounded-full border border-purple-100 transition duration-300"
+                                        id="current-card-photo" >
+                                @else
+                                    <div class="w-full h-full rounded-full bg-purple-50 flex items-center justify-center text-purple-600 text-4xl font-bold border border-purple-100" id="current-card-photo-default">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+
+                                {{-- IKON KAMERA KECIL DI POJOK BAWAH (Pemicu Modal Aksi) --}}
+                                <div id="camera-icon-badge" 
+                                    class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white text-gray-700 flex items-center justify-center border-2 border-purple-500 
+                                    shadow-lg transition-all duration-200 
+                                    group-hover/photo:bg-purple-500 group-hover/photo:text-white group-hover/photo:scale-105">
+                                    <i class="fas fa-camera text-xs"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Navigation Menu -->
-                    <div class="p-4">
-                        <nav class="space-y-1">
-                            <a href="#informasi-akun" 
-                               class="flex items-center px-3 py-2 text-sm font-medium text-purple-600 bg-purple-50 rounded-lg border border-purple-100">
-                                <i class="fas fa-user-circle mr-3 text-purple-500"></i>
-                                Informasi Akun
-                            </a>
-                        </nav>
+                        
+                        <h2 class="text-xl font-bold text-gray-800 mt-4">{{ $user->name }}</h2>
+                        <p class="text-gray-500 text-sm font-medium">{{ $user->email }}</p>
                     </div>
                 </div>
 
-                <!-- Statistik Petugas -->
-                <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4">Aktivitas Petugas</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Laporan Ditangani</span>
-                            <span class="font-semibold text-purple-600">{{ $totalLaporanDitangani ?? 0 }}</span>
+                {{-- Ringkasan Kinerja Petugas --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Ringkasan Kinerja</h3>
+                    <div class="space-y-4">
+
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-purple-50 transition duration-200">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-tasks text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Laporan Ditangani</span>
+                            </div>
+                            <span class="font-bold text-gray-900">{{ $totalLaporanDitangani }}</span>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Komentar Diberikan</span>
-                            <span class="font-semibold text-blue-600">{{ $totalKomentar ?? 0 }}</span>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-purple-50 transition duration-200">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Laporan Selesai</span>
+                            </div>
+                            <span class="font-bold text-gray-900">{{ $totalLaporanSelesai }}</span>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Bergabung Sejak</span>
-                            <span class="text-sm text-gray-500">{{ Auth::user()->created_at->format('d M Y') }}</span>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-purple-50 transition duration-200">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
+                                    <i class="fas fa-comments text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Total Komentar</span>
+                            </div>
+                            <span class="font-bold text-gray-900">{{ $totalKomentar }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-purple-50 transition duration-200">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center">
+                                    <i class="fas fa-calendar-alt text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Bergabung</span>
+                            </div>
+                            <span class="font-bold text-gray-900 text-xs">{{ $user->created_at->isoFormat('D MMMM YYYY') }}</span>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <!-- Main Content -->
             <div class="lg:col-span-2">
-                <!-- Informasi Akun Section -->
-                <div id="informasi-akun" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">Informasi Akun</h2>
-                        <div class="flex items-center space-x-3">
-                            <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
-                                <i class="fas fa-check-circle mr-1"></i>Aktif
-                            </span>
-                            <button type="button" id="editBtn" class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition">
-                                <i class="fas fa-edit mr-2"></i>Edit Profil
-                            </button>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 h-full">
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Edit Informasi Akun</h2>
+                            <p class="text-sm text-gray-500 mt-1">Perbarui detail profil Anda di sini.</p>
                         </div>
                     </div>
 
+                    {{-- Notifikasi Sukses/Error --}}
                     @if(session('success'))
-                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <div class="flex items-center">
-                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                <span class="text-green-700 font-medium">{{ session('success') }}</span>
-                            </div>
+                        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-md flex items-center shadow-sm">
+                            <i class="fas fa-check-circle mr-3 text-lg"></i>
+                            <span class="font-medium">{{ session('success') }}</span>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-md flex items-center shadow-sm">
+                            <i class="fas fa-exclamation-circle mr-3 text-lg"></i>
+                            <span class="font-medium">{{ session('error') }}</span>
+                        </div>
+                    @endif
+                    {{-- Validasi Error untuk Form --}}
+                    @if ($errors->any())
+                        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-md shadow-sm">
+                            <p class="font-bold flex items-center"><i class="fas fa-times-circle mr-2"></i> Ada kesalahan input:</p>
+                            <ul class="mt-1 ml-4 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
 
-                    @if($errors->any())
-                        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                            <div class="flex items-center">
-                                <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
-                                <span class="text-red-700 font-medium">Terdapat kesalahan dalam pengisian form.</span>
-                            </div>
-                        </div>
-                    @endif
 
+                    {{-- FORM UPDATE NAMA & EMAIL --}}
                     <form action="{{ route('petugas.profil.update') }}" method="POST">
                         @csrf
                         @method('PUT')
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Nama -->
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Nama Lengkap <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="name" 
-                                       name="name" 
-                                       value="{{ old('name', Auth::user()->name) }}"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-                                       required>
-                                @error('name')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
 
-                            <!-- Email -->
+                        <div class="space-y-6">
                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Email <span class="text-red-500">*</span>
-                                </label>
-                                <input type="email" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ old('email', Auth::user()->email) }}"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-                                       required>
-                                @error('email')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Role (Readonly) -->
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Role
-                                </label>
-                                <div class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-600">
-                                    <i class="fas fa-shield-alt mr-2 text-purple-500"></i>Petugas
+                                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-purple-500 transition">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <input type="text" name="name" id="name" 
+                                        value="{{ old('name', $user->name) }}" 
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition outline-none"
+                                        placeholder="Nama lengkap Anda"
+                                        required>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">Role tidak dapat diubah</p>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-purple-500 transition">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <input type="email" name="email" id="email" 
+                                        value="{{ old('email', $user->email) }}" 
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition outline-none"
+                                        placeholder="email@contoh.com"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Role Akun</label>
+                                <div class="w-full pl-4 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 flex items-center cursor-not-allowed select-none">
+                                    <i class="fas fa-lock mr-2 text-gray-400"></i>
+                                    <span>Petugas</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                    <i class="fas fa-info-circle mr-1"></i> Role akun tidak dapat diubah secara mandiri.
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Action Buttons (hidden by default) -->
-                        <div id="actionButtons" class="hidden flex items-center space-x-3 mt-6 pt-6 border-t border-gray-200">
-                            <button type="submit" class="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
-                                <i class="fas fa-save mr-2"></i>Simpan
-                            </button>
-                            <button type="button" id="cancelBtn" class="px-6 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition">
-                                <i class="fas fa-times mr-2"></i>Batalkan
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                                <i class="fas fa-save mr-2"></i> Simpan Perubahan
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-<!-- JavaScript untuk smooth scroll, active menu, dan edit profil -->
+{{-- MODAL AKSI FOTO --}}
+<div id="photo-action-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[80] hidden" onclick="closePhotoActionModal()">
+    <div class="relative bg-white rounded-xl shadow-2xl max-w-xs w-full m-4 p-4" onclick="event.stopPropagation()">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Opsi Foto Profil</h3>
+        
+        <ul class="space-y-2">
+            {{-- GANTI/PILIH FOTO --}}
+            <li>
+                <button type="button" onclick="triggerFileInput()" id="change-select-photo-button"
+                        class="w-full flex items-center px-3 py-2 text-purple-600 font-medium rounded-lg hover:bg-purple-50 transition text-sm">
+                    <i class="fas fa-upload w-5 mr-3"></i> 
+                    {{ $hasPhoto ? 'Ganti Foto' : 'Pilih Foto Profil' }}
+                </button>
+            </li>
+            
+            {{-- HAPUS FOTO --}}
+            <li>
+                <button type="button" id="delete-photo-button" 
+                        onclick="openDeleteConfirmModal(); closePhotoActionModal();"
+                        class="w-full flex items-center px-3 py-2 text-red-600 font-medium rounded-lg hover:bg-red-50 transition text-sm {{ $hasPhoto ? '' : 'hidden' }}">
+                    <i class="fas fa-trash-alt w-5 mr-3"></i> 
+                    Hapus Foto
+                </button>
+            </li>
+            {{-- LIHAT FOTO --}}
+            <li>
+                <button type="button" id="view-photo-button"
+                        onclick="openPopupModal(); closePhotoActionModal();"
+                        class="w-full flex items-center px-3 py-2 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition text-sm {{ $hasPhoto ? '' : 'hidden' }}">
+                    <i class="fas fa-eye w-5 mr-3"></i> 
+                    Lihat Foto Saat Ini
+                </button>
+            </li>
+        </ul>
+        
+        <button type="button" 
+                onclick="closePhotoActionModal()" 
+                class="w-full mt-4 px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100 transition text-sm">
+            Batal
+        </button>
+    </div>
+</div>
+
+{{-- MODAL KONFIRMASI PREVIEW FOTO + FORM UPLOAD --}}
+<div id="photo-preview-confirm-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[85] hidden" onclick="closePhotoPreviewConfirmModal()">
+    <div class="relative bg-white rounded-xl shadow-2xl max-w-sm w-full m-4 p-6" onclick="event.stopPropagation()">
+        <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 text-center">
+            Konfirmasi Foto Profil Baru
+        </h3>
+        
+        <div class="flex justify-center mb-4">
+            {{-- PRATINJAU DENGAN BENTUK PERSEGI PANJANG --}}
+            <img id="preview-image-source" src="" class="max-w-full max-h-[200px] object-contain rounded-lg border-2 border-purple-200 shadow-md" alt="Preview Foto Baru">
+        </div>
+
+        <p class="text-gray-600 mb-6 text-center text-sm">
+            Anda yakin ingin menggunakan gambar ini sebagai foto profil?
+        </p>
+
+        {{-- FORM UNTUK MENGUPLOAD FOTO --}}
+        <form id="photo-upload-form" action="{{ route('petugas.profil.update_photo') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT') 
+            <input type="file" id="modal_photo_input" accept="image/*" name="profile_photo" class="hidden"> 
+            
+            <button type="submit" 
+                    id="confirm-upload-button"
+                    class="w-full px-4 py-2 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition shadow-md text-sm mb-2">
+                Simpan Foto Profil Baru
+            </button>
+        </form>
+        
+        <button type="button" 
+                onclick="closePhotoPreviewConfirmModal()" 
+                class="w-full px-4 py-2 text-gray-600 font-medium rounded-lg border border-gray-300 hover:bg-gray-100 transition text-sm">
+            Batal
+        </button>
+    </div>
+</div>
+
+
+{{-- MODAL POP-UP DETAIL FOTO --}}
+<div id="popup-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[70] hidden" onclick="closePopupModal(event)">
+    <div class="relative bg-white rounded-lg shadow-xl overflow-hidden max-w-lg w-full m-4 transform transition-all duration-300 ease-out" onclick="event.stopPropagation()">
+        <button type="button" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 transition text-2xl p-1 z-10" onclick="closePopupModal(event)">
+            &times;
+        </button>
+        <div class="p-6">
+            <h3 class="text-lg font-bold mb-4 border-b pb-2">Tampilan Penuh</h3>
+            <div class="flex justify-center items-center">
+                <img id="modal-image-source" 
+                    src="{{ $hasPhoto ? $fotoProfilUrl : '' }}" 
+                    class="max-w-full max-h-[80vh] object-contain rounded-lg" 
+                    alt="Foto Profil Detail">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- MODAL KONFIRMASI HAPUS FOTO --}}
+<div id="delete-confirm-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[90] hidden" onclick="closeDeleteConfirmModal()">
+    <div class="relative bg-white rounded-xl shadow-2xl max-w-sm w-full m-4 p-6 text-center" onclick="event.stopPropagation()">
+        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center justify-center">
+            <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Konfirmasi Hapus
+        </h3>
+        <p class="text-gray-600 mb-6">Anda yakin ingin menghapus foto profil saat ini? Foto akan digantikan oleh inisial nama Anda.</p>
+        
+        <form id="delete-photo-form" action="{{ route('petugas.profil.delete_photo') }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" 
+                    class="w-full px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition shadow-md">
+                Ya, Hapus Foto Saya
+            </button>
+        </form>
+        
+        <button type="button" 
+                onclick="closeDeleteConfirmModal()" 
+                class="w-full mt-2 px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100 transition text-sm">
+            Batal
+        </button>
+    </div>
+</div>
+
+
+{{-- SCRIPT INTERAKSI --}}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scroll untuk menu
-    const menuLinks = document.querySelectorAll('a[href^="#"]');
-
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-
-                // Update active menu
-                menuLinks.forEach(link => {
-                    link.classList.remove('text-purple-600', 'bg-purple-50', 'border-purple-100');
-                    link.classList.add('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
-                });
-
-                this.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
-                this.classList.add('text-purple-600', 'bg-purple-50', 'border-purple-100');
+    const userName = "{{ $user->name }}";
+    // Input file yang ada di dalam modal konfirmasi (form upload)
+    const modalFileInput = document.getElementById('modal_photo_input'); 
+    const modalImage = document.getElementById('modal-image-source');
+    
+    // Elemen tampilan utama
+    const cardPhoto = document.getElementById('current-card-photo');
+    const cardPhotoDefault = document.getElementById('current-card-photo-default');
+    const deleteBtnModal = document.getElementById('delete-photo-button');
+    const viewBtnModal = document.getElementById('view-photo-button');
+    const changeSelectBtnText = document.getElementById('change-select-photo-button');
+    
+    // Elemen modal preview baru
+    const previewConfirmModal = document.getElementById('photo-preview-confirm-modal');
+    const previewImage = document.getElementById('preview-image-source');
+    const uploadForm = document.getElementById('photo-upload-form');
+    
+    let hasCurrentPhoto = {{ $hasPhoto ? 'true' : 'false' }};
+    
+    // --- UTILITY FUNGSI PREVIEW/UPDATE TAMPILAN ---
+    
+    function updateCardDisplay(src = null, isNewPhoto = false) {
+        if (src && isNewPhoto) {
+            hasCurrentPhoto = true;
+            
+            let imgElement = document.getElementById('current-card-photo');
+            if (!imgElement) {
+                imgElement = document.createElement('img');
+                imgElement.id = 'current-card-photo';
+                imgElement.alt = 'Foto Profil';
+                imgElement.classList.add('w-full', 'h-full', 'object-cover', 'rounded-full', 'border', 'border-purple-100', 'transition', 'duration-300'); 
+                cardPhotoDefault.parentNode.insertBefore(imgElement, cardPhotoDefault);
             }
-        });
-    });
+            imgElement.src = src; 
+            imgElement.classList.remove('hidden');
+            if (cardPhotoDefault) cardPhotoDefault.classList.add('hidden'); 
 
-    // Set active menu berdasarkan hash URL
-    const currentHash = window.location.hash;
-    if (currentHash) {
-        const activeLink = document.querySelector(`a[href="${currentHash}"]`);
-        if (activeLink) {
-            menuLinks.forEach(link => {
-                link.classList.remove('text-purple-600', 'bg-purple-50', 'border-purple-100');
-                link.classList.add('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
-            });
-            activeLink.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
-            activeLink.classList.add('text-purple-600', 'bg-purple-50', 'border-purple-100');
+            changeSelectBtnText.innerHTML = '<i class="fas fa-upload w-5 mr-3"></i> Ganti Foto';
+            deleteBtnModal.classList.remove('hidden');
+            viewBtnModal.classList.remove('hidden');
+
+            modalImage.src = src; 
+
+        } else if (!src) {
+            hasCurrentPhoto = false;
+
+            let imgElement = document.getElementById('current-card-photo');
+            if (imgElement) imgElement.classList.add('hidden'); 
+            if (cardPhotoDefault) cardPhotoDefault.classList.remove('hidden'); 
+
+            changeSelectBtnText.innerHTML = '<i class="fas fa-upload w-5 mr-3"></i> Pilih Foto Profil';
+            deleteBtnModal.classList.add('hidden');
+            viewBtnModal.classList.add('hidden');
+
+            modalImage.src = '';
         }
     }
 
-    // Edit Profil Functionality
-    const editBtn = document.getElementById('editBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const actionButtons = document.getElementById('actionButtons');
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
+    const handleFileInputChange = (file) => {
+        if (file) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            modalFileInput.files = dataTransfer.files; 
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const src = e.target.result;
+                previewImage.src = src;
+                openPhotoPreviewConfirmModal();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            modalFileInput.value = '';
+        }
+    };
 
-    let originalName = nameInput.value;
-    let originalEmail = emailInput.value;
+    function triggerFileInput() {
+        closePhotoActionModal(); 
+        
+        const tempFileInput = document.createElement('input');
+        tempFileInput.type = 'file';
+        tempFileInput.accept = 'image/*';
+        tempFileInput.style.display = 'none';
 
-    // Enable edit mode
-    editBtn.addEventListener('click', function() {
-        nameInput.disabled = false;
-        emailInput.disabled = false;
-        actionButtons.classList.remove('hidden');
-        editBtn.style.display = 'none';
-    });
+        tempFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleFileInputChange(file);
+            }
+            tempFileInput.remove();
+        });
+        
+        document.body.appendChild(tempFileInput);
+        tempFileInput.click();
+    }
 
-    // Cancel edit
-    cancelBtn.addEventListener('click', function() {
-        nameInput.value = originalName;
-        emailInput.value = originalEmail;
-        nameInput.disabled = true;
-        emailInput.disabled = true;
-        actionButtons.classList.add('hidden');
-        editBtn.style.display = 'inline-block';
-    });
-});
+    // --- FUNGSI MODAL ---
+    function openPhotoPreviewConfirmModal() {
+        previewConfirmModal.classList.remove('hidden');
+    }
+
+    function closePhotoPreviewConfirmModal() {
+        modalFileInput.value = ''; 
+        previewConfirmModal.classList.add('hidden');
+    }
+    
+    function openPhotoActionModal(event) {
+        document.getElementById('photo-action-modal').classList.remove('hidden');
+    }
+
+    function closePhotoActionModal() {
+        document.getElementById('photo-action-modal').classList.add('hidden');
+    }
+    
+    function openPopupModal() {
+        if (hasCurrentPhoto && modalImage.src && modalImage.src.length > 0) {
+            document.getElementById('popup-modal').classList.remove('hidden');
+        } else {
+            alert('Anda belum memiliki foto profil untuk dilihat.');
+        }
+    }
+
+    function closePopupModal(event) {
+        const modal = document.getElementById('popup-modal');
+        if (event && (event.target === modal || event.target.closest('button'))) {
+              modal.classList.add('hidden');
+        }
+    }
+
+    function openDeleteConfirmModal() {
+        document.getElementById('delete-confirm-modal').classList.remove('hidden');
+    }
+
+    function closeDeleteConfirmModal() {
+        document.getElementById('delete-confirm-modal').classList.add('hidden');
+    }
+
+    // --- LOGIKA SETELAH PERUBAHAN (DARI PHP SESSION) ---
+    @if(session('success'))
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = '{{ session('success') }}';
+            
+            if (successMessage.includes('Foto profil berhasil dihapus')) {
+                updateCardDisplay(null, false); 
+            }
+        });
+    @endif
+    
+    @error('profile_photo')
+        document.addEventListener('DOMContentLoaded', function() {
+            openPhotoActionModal(); 
+        });
+    @enderror
+
 </script>
+
 @endsection
