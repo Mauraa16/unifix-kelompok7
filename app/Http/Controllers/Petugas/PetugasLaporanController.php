@@ -12,25 +12,43 @@ class PetugasLaporanController extends Controller
 {
     public function __construct()
     {
-        // Hanya petugas yg boleh akses controller ini
         $this->middleware(['auth', 'role:petugas']);
     }
 
-    // ============================================================
-    // 1. Menampilkan semua laporan
-    // ============================================================
-    public function index()
+    public function index(Request $request)
     {
-        $laporan = Laporan::with(['user', 'kategori'])
-            ->latest()
-            ->paginate(10);
+        $query = Laporan::with(['user', 'kategori']);
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('search') && $request->search != '') {
+            // Konversi search term menjadi huruf kecil untuk perbandingan yang konsisten
+            $searchTerm = '%' . strtolower($request->search) . '%';
+            
+            $query->where(function ($q) use ($searchTerm) {
+                // Menggunakan DB::raw('lower(kolom)') untuk memastikan pencarian case-insensitive 
+                // di tingkat database pada kolom 'judul' dan 'lokasi'.
+
+                // Cari berdasarkan Judul (diketik kecil)
+                $q->whereRaw('lower(judul) like ?', [$searchTerm])
+                // Cari berdasarkan Lokasi (diketik kecil)
+                ->orWhereRaw('lower(lokasi) like ?', [$searchTerm])
+                
+                // Cari berdasarkan Nama Pelapor (relasi user)
+                ->orWhereHas('user', function ($subQuery) use ($searchTerm) {
+                    // Cari nama user (diketik kecil)
+                    $subQuery->whereRaw('lower(name) like ?', [$searchTerm]);
+                });
+            });
+        }
+
+        $laporan = $query->latest()->paginate(10)->withQueryString();
 
         return view('petugas.laporan.index', compact('laporan'));
     }
 
-    // ============================================================
-    // 2. Detail laporan
-    // ============================================================
     public function show(Laporan $laporan)
     {
         $laporan->load(['user', 'kategori', 'komentar.user']);
@@ -38,9 +56,6 @@ class PetugasLaporanController extends Controller
         return view('petugas.laporan.show', compact('laporan'));
     }
 
-    // ============================================================
-    // 3. Update status laporan
-    // ============================================================
     public function updateStatus(Request $request, Laporan $laporan)
     {
         $request->validate([
@@ -54,9 +69,6 @@ class PetugasLaporanController extends Controller
         return back()->with('success', 'Status laporan berhasil diperbarui.');
     }
 
-    // ============================================================
-    // 4. Tambah komentar
-    // ============================================================
     public function storeKomentar(Request $request, Laporan $laporan)
     {
         $request->validate([
@@ -72,45 +84,6 @@ class PetugasLaporanController extends Controller
         return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
-    // ============================================================
-    // 5. Filter status: Belum Diproses
-    // ============================================================
-    public function filterBelumDiproses()
-    {
-        $laporan = Laporan::where('status', 'Belum Diproses')
-            ->with(['user', 'kategori'])
-            ->latest()->paginate(10);
-
-        return view('petugas.laporan.index', compact('laporan'));
-    }
-
-    // ============================================================
-    // 6. Filter status: Diproses
-    // ============================================================
-    public function filterDiproses()
-    {
-        $laporan = Laporan::where('status', 'Diproses')
-            ->with(['user', 'kategori'])
-            ->latest()->paginate(10);
-
-        return view('petugas.laporan.index', compact('laporan'));
-    }
-
-    // ============================================================
-    // 7. Filter status: Selesai
-    // ============================================================
-    public function filterSelesai()
-    {
-        $laporan = Laporan::where('status', 'Selesai')
-            ->with(['user', 'kategori'])
-            ->latest()->paginate(10);
-
-        return view('petugas.laporan.index', compact('laporan'));
-    }
-
-    // ============================================================
-    // 8. Riwayat laporan yg ditangani petugas
-    // ============================================================
     public function riwayat()
     {
         $userId = Auth::id();
@@ -124,4 +97,5 @@ class PetugasLaporanController extends Controller
 
         return view('petugas.riwayat.index', compact('laporan'));
     }
+
 }

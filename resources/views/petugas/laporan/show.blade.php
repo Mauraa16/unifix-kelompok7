@@ -4,7 +4,6 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         
-        <!-- Tombol Kembali -->
         <div class="mb-6">
             <a href="{{ route('petugas.laporan.index') }}" 
                class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors">
@@ -13,7 +12,6 @@
             </a>
         </div>
         
-        <!-- Notifikasi -->
         @if(session('success'))
             <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div class="flex items-center">
@@ -32,17 +30,15 @@
             </div>
         @endif
 
-        <!-- Kartu Detail Laporan -->
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
             
-            <!-- Header Laporan -->
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-800">{{ $laporan->judul }}</h1>
                         <div class="flex flex-wrap items-center gap-2 mt-2">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                <i class="fas fa-tag mr-2"></i> {{ $laporan->kategori->nama ?? 'Umum' }}
+                                <i class="fas fa-tag mr-2"></i> {{ $laporan->kategori->nama_kategori ?? 'Kategori tidak ditemukan' }}
                             </span>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
                                 <i class="fas fa-user mr-2"></i> {{ $laporan->user->name }}
@@ -60,30 +56,38 @@
                         </div>
                     </div>
                     
-                    <!-- Quick Status Update -->
                     <div class="mt-4 md:mt-0">
-                        <form action="{{ route('petugas.laporan.updateStatus', $laporan->id) }}" method="POST">
+                        <form action="{{ route('petugas.laporan.updateStatus', $laporan->id) }}" method="POST" class="flex items-center space-x-2">
                             @csrf
-                            @method('PUT')   <!-- INI YANG WAJIB ADA -->
+                            @method('PUT') 
+                            
+                            @if ($laporan->status == 'Belum Diproses')
+                                <input type="hidden" name="status" value="Diproses">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition-colors flex items-center">
+                                    <i class="fas fa-spinner mr-2"></i> Mulai Proses
+                                </button>
+                                <button type="submit" name="status" value="Selesai" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i> Langsung Selesai
+                                </button>
+                            @elseif ($laporan->status == 'Diproses')
+                                <input type="hidden" name="status" value="Selesai">
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i> Tandai Selesai
+                                </button>
+                            @else
+                                <span class="px-3 py-1 rounded-lg text-sm text-green-700 bg-green-100 border border-green-200 font-medium">
+                                    <i class="fas fa-check-double mr-1"></i> Status Final
+                                </span>
+                            @endif
 
-                            <select name="status" class="border rounded px-2">
-                                <option value="Belum Diproses" {{ $laporan->status == 'Belum Diproses' ? 'selected' : '' }}>Belum Diproses</option>
-                                <option value="Diproses" {{ $laporan->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                                <option value="Selesai" {{ $laporan->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                            </select>
-
-                            <button type="submit" class="bg-purple-600 text-white px-3 py-1 rounded">
-                                Update Status
-                            </button>
                         </form>
                     </div>
+
                 </div>
             </div>
 
-            <!-- Isi Laporan -->
             <div class="p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Detail Laporan -->
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Detail Laporan</h3>
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -103,7 +107,6 @@
                         @endif
                     </div>
 
-                    <!-- Foto Bukti -->
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Bukti Foto</h3>
                         @if ($laporan->foto)
@@ -122,9 +125,7 @@
                 </div>
             </div>
 
-            <!-- Section Komentar & Tanggapan -->
             <div class="border-t border-gray-200">
-                <!-- Form Tambah Komentar -->
                 <div class="p-6 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-gray-200">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                         <i class="fas fa-comment-medical mr-2 text-purple-600"></i>
@@ -172,7 +173,6 @@
                     </form>
                 </div>
 
-                <!-- Daftar Komentar -->
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-bold text-gray-800 flex items-center">
@@ -185,12 +185,18 @@
                     </div>
 
                     <div class="space-y-4">
-                        <!-- Komentar dari Pelapor (Laporan Awal) -->
                         <div class="flex gap-4">
                             <div class="flex-shrink-0">
+
+                                @if($laporan->user->foto_profil)
+                                <img src="{{ Storage::url($laporan->user->foto_profil) }}" 
+                                     class="w-10 h-10 rounded-full object-cover shadow-md" alt="{{ $laporan->user->name }}">
+                                @else
                                 <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shadow-md">
                                     <i class="fas fa-user text-sm"></i>
                                 </div>
+                                @endif
+
                             </div>
                             <div class="flex-1 bg-purple-50 rounded-lg p-4 border border-purple-100">
                                 <div class="flex items-center justify-between mb-2">
@@ -204,13 +210,19 @@
                             </div>
                         </div>
 
-                        <!-- Komentar dari Petugas/Admin -->
                         @forelse($laporan->komentar as $komentar)
                         <div class="flex gap-4">
                             <div class="flex-shrink-0">
+
+                                @if($komentar->user->foto_profil)
+                                <img src="{{ Storage::url($komentar->user->foto_profil) }}" 
+                                     class="w-10 h-10 rounded-full object-cover shadow-md" alt="{{ $komentar->user->name }}">
+                                @else
                                 <div class="w-10 h-10 rounded-full {{ $komentar->user->role == 'petugas' ? 'bg-blue-600' : 'bg-green-600' }} flex items-center justify-center text-white shadow-md">
                                     <i class="fas fa-user-shield text-sm"></i>
                                 </div>
+                                @endif
+
                             </div>
                             <div class="flex-1 bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
                                 <div class="flex items-center justify-between mb-2">
@@ -231,7 +243,6 @@
                             </div>
                         </div>
                         @empty
-                        <!-- Empty State -->
                         <div class="text-center py-8">
                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                                 <i class="fas fa-comment-slash text-2xl text-gray-400"></i>
@@ -251,8 +262,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('isi_komentar');
     const charCount = document.getElementById('charCount');
-    
-    // Character counter
+
+    if (textarea.value.length > 0) {
+        const length = textarea.value.length;
+        charCount.textContent = length + ' karakter';
+        charCount.classList.add('text-green-500');
+    }
+
     textarea.addEventListener('input', function() {
         const length = this.value.length;
         charCount.textContent = length + ' karakter';
@@ -265,11 +281,9 @@ document.addEventListener('DOMContentLoaded', function() {
             charCount.classList.add('text-green-500');
         }
     });
-    
-    // Auto-focus textarea
+
     textarea.focus();
-    
-    // Scroll to form if there are errors
+
     @if($errors->has('isi_komentar'))
         textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
     @endif
@@ -282,19 +296,16 @@ function clearForm() {
     document.getElementById('charCount').classList.add('text-red-500');
 }
 
-// Auto-scroll to top for success messages
 @if(session('success'))
 window.scrollTo({ top: 0, behavior: 'smooth' });
 @endif
 </script>
 
 <style>
-/* Smooth transitions */
 textarea {
     transition: all 0.2s ease-in-out;
 }
 
-/* Custom scrollbar for textarea */
 textarea::-webkit-scrollbar {
     width: 6px;
 }

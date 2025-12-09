@@ -3,7 +3,6 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
         <div class="mb-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
@@ -19,7 +18,6 @@
             </div>
         </div>
 
-        <!-- Notifications -->
         @if(session('success'))
             <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div class="flex items-center">
@@ -28,9 +26,16 @@
                 </div>
             </div>
         @endif
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-times-circle text-red-500 mr-2"></i>
+                    <span class="text-red-700 font-medium">{{ session('error') }}</span>
+                </div>
+            </div>
+        @endif
 
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
@@ -70,9 +75,22 @@
                     </div>
                 </div>
             </div>
+             
+             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hidden xl:block">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                        <i class="fas fa-hand-pointer text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Terakhir Ditangani</p>
+                        <p class="text-sm font-bold text-gray-900">
+                            {{ $laporan->first() ? $laporan->first()->updated_at->diffForHumans() : '-' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Laporan Table -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <h2 class="text-lg font-bold text-gray-800">Daftar Laporan yang Ditangani</h2>
@@ -125,7 +143,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ $item->kategori->nama ?? 'Umum' }}
+                                    {{ $item->kategori->nama_kategori ?? 'Umum' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -161,30 +179,56 @@
                                         Detail
                                     </a>
                                     
-                                    <!-- Quick Status Update -->
                                     <div class="relative group">
-                                        <button class="text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors duration-200 flex items-center">
+                                        <button class="text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors duration-200 flex items-center"
+                                                title="Perbarui Status">
                                             <i class="fas fa-edit mr-1.5 text-xs"></i>
                                             Status
                                         </button>
                                         <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                            
                                             <form action="{{ route('petugas.laporan.updateStatus', $item->id) }}" method="POST" class="px-2">
                                                 @csrf
-                                                <button type="submit" name="status" value="Belum Diproses" 
-                                                        class="w-full text-left px-3 py-2 text-sm text-yellow-700 hover:bg-yellow-50 rounded flex items-center {{ $item->status == 'Belum Diproses' ? 'bg-yellow-50' : '' }}">
-                                                    <i class="fas fa-clock mr-2 text-yellow-600"></i>
-                                                    Belum Diproses
-                                                </button>
-                                                <button type="submit" name="status" value="Diproses" 
-                                                        class="w-full text-left px-3 py-2 text-sm text-blue-700 hover:bg-blue-50 rounded flex items-center {{ $item->status == 'Diproses' ? 'bg-blue-50' : '' }}">
-                                                    <i class="fas fa-spinner mr-2 text-blue-600"></i>
-                                                    Diproses
-                                                </button>
-                                                <button type="submit" name="status" value="Selesai" 
-                                                        class="w-full text-left px-3 py-2 text-sm text-green-700 hover:bg-green-50 rounded flex items-center {{ $item->status == 'Selesai' ? 'bg-green-50' : '' }}">
-                                                    <i class="fas fa-check-circle mr-2 text-green-600"></i>
-                                                    Selesai
-                                                </button>
+                                                @method('PUT') 
+
+                                                @if($item->status == 'Belum Diproses')
+                                                    <button type="button" disabled
+                                                            class="w-full text-left px-3 py-2 text-sm text-yellow-700 bg-yellow-50 font-semibold rounded flex items-center cursor-default opacity-75 mb-1">
+                                                        <i class="fas fa-clock mr-2 text-yellow-600"></i>
+                                                        Belum Diproses
+                                                    </button>
+                                                @endif
+
+                                                @if($item->status == 'Belum Diproses' || $item->status == 'Diproses')
+                                                    @if($item->status == 'Diproses')
+                                                        <button type="button" disabled
+                                                                class="w-full text-left px-3 py-2 text-sm text-blue-700 bg-blue-50 font-semibold rounded flex items-center cursor-default opacity-75 mb-1">
+                                                            <i class="fas fa-spinner mr-2 text-blue-600"></i>
+                                                            Diproses
+                                                        </button>
+                                                    @else
+                                                        <button type="submit" name="status" value="Diproses" 
+                                                                class="w-full text-left px-3 py-2 text-sm text-blue-700 hover:bg-blue-50 rounded flex items-center mb-1">
+                                                            <i class="fas fa-spinner mr-2 text-blue-600"></i>
+                                                            Ubah ke Diproses
+                                                        </button>
+                                                    @endif
+                                                @endif
+
+                                                @if($item->status != 'Selesai')
+                                                    <button type="submit" name="status" value="Selesai" 
+                                                            class="w-full text-left px-3 py-2 text-sm text-green-700 hover:bg-green-50 rounded flex items-center">
+                                                        <i class="fas fa-check-circle mr-2 text-green-600"></i>
+                                                        Selesai
+                                                    </button>
+                                                @else
+                                                    <button type="button" disabled
+                                                            class="w-full text-left px-3 py-2 text-sm text-green-700 bg-green-50 font-semibold rounded flex items-center cursor-default opacity-75">
+                                                        <i class="fas fa-check-circle mr-2 text-green-600"></i>
+                                                        Sudah Selesai
+                                                    </button>
+                                                @endif
+
                                             </form>
                                         </div>
                                     </div>
@@ -211,7 +255,6 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
             @if($laporan->hasPages())
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between">
@@ -226,7 +269,6 @@
             @endif
         </div>
 
-        <!-- Activity Summary -->
         <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Ringkasan Aktivitas</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
